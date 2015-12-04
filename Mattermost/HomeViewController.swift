@@ -97,10 +97,17 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
             return false
         }
         
-        let isHelp  = request.URL?.path?.containsString("/static/help") ?? false
-
         // Open help link in another browser
+        let isHelp  = request.URL?.path?.containsString("/static/help") ?? false
+        
         if (currentUrl.containsString((request.URL?.host)!) && isHelp) {
+            UIApplication.sharedApplication().openURL(request.URL!)
+            return false
+        }
+
+        // Open file download link in another browser
+        let isFile  = request.URL?.path?.containsString("/api/v1/files/get/") ?? false
+        if (currentUrl.containsString((request.URL?.host)!) && isFile) {
             UIApplication.sharedApplication().openURL(request.URL!)
             return false
         }

@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "D5629A5393FAC3FEB96555CB2A7F558C260F8CE4",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D5629A5393FAC3FEB96555CB2A7F558C260F8CE4" : 0,
+    "C160F54886B1D19D2A268466F1BF9A9627CC201C" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "ACBD9563-4C26-4BBB-9A06-057D8B3E2780",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D5629A5393FAC3FEB96555CB2A7F558C260F8CE4" : "ios\/",
+    "C160F54886B1D19D2A268466F1BF9A9627CC201C" : "Mattermost"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Mattermost",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Mattermost.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mattermost\/ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C160F54886B1D19D2A268466F1BF9A9627CC201C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mattermost\/ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D5629A5393FAC3FEB96555CB2A7F558C260F8CE4"
+    }
+  ]
+}
