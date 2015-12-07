@@ -11,7 +11,7 @@ let CURRENT_TEAM_NAME = "CurrentTeamName"
 let CURRENT_URL = "CurrentUrl"
 let CURRENT_BACKGROUND_TIME = "CurrentBackTime"
 
-let BASE_URL_MATTERMOST = "https://pre-release.mattermost.com"
+let BASE_URL_MATTERMOST = ""
 
 class Utils {
     class func HandleUIError(message: String, label: UILabel) {

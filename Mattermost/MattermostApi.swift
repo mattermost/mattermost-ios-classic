@@ -11,7 +11,7 @@ protocol MattermostApiProtocol {
 
 public class MattermostApi: NSObject {
     
-    var baseUrl = "https://pre-release.mattermost.com"
+    var baseUrl = ""
     var data: NSMutableData = NSMutableData()
     var statusCode = 200
     var delegate: MattermostApiProtocol?

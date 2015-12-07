@@ -5,7 +5,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Mattermost1-->
+        <!--Mattermost-->
         <scene sceneID="IjG-59-0j3">
             <objects>
                 <viewController id="Bmq-lJ-KWD" customClass="TeamUrlViewController" customModule="Mattermost" customModuleProvider="target" sceneMemberID="viewController">
@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Sign in to Mattermost1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gb0-C5-Ddc">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign in to Mattermost" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gb0-C5-Ddc">
                                 <rect key="frame" x="186" y="243" width="228.5" height="26"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="165" id="3SO-r5-1bm"/>
@@ -34,7 +34,7 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://pre-release.mattermost.com/core" borderStyle="line" placeholder="Enter team URL" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GV6-dn-r3s" customClass="TextField" customModule="Mattermost" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Enter team URL" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GV6-dn-r3s" customClass="TextField" customModule="Mattermost" customModuleProvider="target">
                                 <rect key="frame" x="22" y="289" width="556" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="345" id="Hvg-H4-bbB"/>
@@ -153,7 +153,7 @@
                             <outletCollection property="gestureRecognizers" destination="NVL-1z-CC2" appends="YES" id="L5H-Sn-iz7"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" title="Mattermost1" id="xSX-If-8pD">
+                    <navigationItem key="navigationItem" title="Mattermost" id="xSX-If-8pD">
                         <barButtonItem key="backBarButtonItem" title="Team" id="1nr-bu-B2O"/>
                         <barButtonItem key="rightBarButtonItem" title="Next" id="cDo-8R-qQu">
                             <connections>
