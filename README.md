@@ -4,7 +4,11 @@ This iOS Application source code is meant to be used by organizations who self-h
 
 To properly encrypt push notifications from your Mattermost Platform Server to your Mattermost iOS Application a proxy, the [Mattermost Push Notification Server](https://github.com/mattermost/push-proxy), needs to be set up with a private key generated using your organization's Apple Developer account. 
 
-#### Requirements 
+#### Supported Platforms 
+
+- iOS 9+ iPhone, iPad and iPod Touch devices
+
+#### Requirements for Deployment 
 
 1. Experience compiling and deploying iOS applications either to an enterprise App Store or publicly
 2. An Apple Developer account and appropriate Apple devices to compiled and deploy the application
