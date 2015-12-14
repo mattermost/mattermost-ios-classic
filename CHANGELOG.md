@@ -1,8 +1,8 @@
 # Mattermost Changelog
 
-## Release v0.9.0
+## Release v1.0.0
 
-Released 2015–12-??
+Released 2015–12-14
 
 ### Release Highlights
 
