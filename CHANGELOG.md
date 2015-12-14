@@ -1,0 +1,31 @@
+# Mattermost Changelog
+
+## Release v0.9.0
+
+Released 2015–12-??
+
+### Release Highlights
+
+- First release of Mattermost iOS app, a team communication service for sharing messages and files across PCs and phones, with archiving and instant search 
+- Using the iOS app requires a Mattermost service to be set up, see https://github.com/mattermost/platform for more details
+ 
+### Features
+
+Push Notifications
+- Ability to enable push notifications for mobile devices
+
+Messaging and File Sharing
+
+- Send messages, comments, files and images across public, private and 1-1 channels
+- Personalize notifications for unreads and mentions by channel
+- Use #hashtags to tag and find messages, discussions and files
+
+Archiving and Search 
+ 
+- Search public and private channels for historical messages and comments 
+- View recent mentions of your name, username, nickname, and custom search terms
+
+Anywhere Access
+
+- Use Mattermost from a native iOS app as well as from web-enabled phones and PCs
+- Define team-specific branding and color themes across your devices
