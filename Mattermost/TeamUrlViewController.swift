@@ -76,6 +76,8 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
             Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
         } else if (message.containsString("(-1)")) {
             Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+        } else if (message.containsString("UNKNOWN_ERR")) {
+            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
         } else {
             Utils.HandleUIError(message, label: errorLabel)
         }

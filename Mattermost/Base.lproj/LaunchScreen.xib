@@ -17,7 +17,7 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="logoIntro" translatesAutoresizingMaskIntoConstraints="NO" id="6kx-AA-y10">
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" misplaced="YES" image="logoIntro" translatesAutoresizingMaskIntoConstraints="NO" id="6kx-AA-y10">
                     <rect key="frame" x="25" y="256" width="349" height="126"/>
                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>

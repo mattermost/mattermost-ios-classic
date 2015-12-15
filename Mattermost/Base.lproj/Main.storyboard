@@ -17,8 +17,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign in to Mattermost" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gb0-C5-Ddc">
-                                <rect key="frame" x="186" y="243" width="228.5" height="26"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter team URL" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gb0-C5-Ddc">
+                                <rect key="frame" x="217" y="143.5" width="166.5" height="26"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="165" id="3SO-r5-1bm"/>
                                     <constraint firstAttribute="height" constant="21" id="Rk2-no-eYL"/>
@@ -34,8 +34,8 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Enter team URL" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GV6-dn-r3s" customClass="TextField" customModule="Mattermost" customModuleProvider="target">
-                                <rect key="frame" x="22" y="289" width="556" height="25"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="E.g. https://server.com/teamname" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GV6-dn-r3s" customClass="TextField" customModule="Mattermost" customModuleProvider="target">
+                                <rect key="frame" x="22" y="189.5" width="556" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="345" id="Hvg-H4-bbB"/>
                                     <constraint firstAttribute="height" constant="30" id="UBW-gQ-R4G"/>
@@ -59,28 +59,13 @@
                                 </variation>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is where an error will show" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lkr-Cw-Inf">
-                                <rect key="frame" x="30" y="380" width="540" height="17"/>
+                                <rect key="frame" x="30" y="290.5" width="540" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="0eV-h1-xLB">
-                                <rect key="frame" x="262" y="157" width="76" height="76"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="Fpm-4Q-8l0"/>
-                                    <constraint firstAttribute="width" constant="76" id="pzZ-rC-hTc"/>
-                                    <constraint firstAttribute="height" constant="128" id="qCN-XN-k73"/>
-                                    <constraint firstAttribute="height" constant="76" id="stn-SR-y5J"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="Fpm-4Q-8l0"/>
-                                        <exclude reference="qCN-XN-k73"/>
-                                    </mask>
-                                </variation>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b1K-5D-umH">
-                                <rect key="frame" x="22" y="329" width="556" height="41"/>
+                                <rect key="frame" x="22" y="229.5" width="556" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <inset key="contentEdgeInsets" minX="60" minY="10" maxX="60" maxY="10"/>
                                 <state key="normal" title="Proceed"/>
@@ -94,13 +79,9 @@
                         <constraints>
                             <constraint firstItem="Lkr-Cw-Inf" firstAttribute="top" secondItem="GV6-dn-r3s" secondAttribute="bottom" constant="3" id="1XC-LX-KkS"/>
                             <constraint firstAttribute="trailingMargin" secondItem="b1K-5D-umH" secondAttribute="trailing" constant="50" id="2Uo-rN-Pd7"/>
-                            <constraint firstItem="0eV-h1-xLB" firstAttribute="leading" secondItem="ZVo-zI-lnF" secondAttribute="leading" constant="194" id="ACo-AR-8Jb"/>
-                            <constraint firstItem="Lkr-Cw-Inf" firstAttribute="top" secondItem="b1K-5D-umH" secondAttribute="bottom" constant="10" id="CCP-Fk-GlH"/>
+                            <constraint firstItem="Lkr-Cw-Inf" firstAttribute="top" secondItem="b1K-5D-umH" secondAttribute="bottom" constant="20" id="CCP-Fk-GlH"/>
                             <constraint firstItem="Lkr-Cw-Inf" firstAttribute="centerX" secondItem="ZVo-zI-lnF" secondAttribute="centerX" id="CNS-FT-EG3"/>
                             <constraint firstItem="GV6-dn-r3s" firstAttribute="leading" secondItem="ZVo-zI-lnF" secondAttribute="leadingMargin" constant="2" id="Dkv-WS-yEr"/>
-                            <constraint firstItem="0eV-h1-xLB" firstAttribute="top" secondItem="R2u-e7-ktE" secondAttribute="bottom" constant="17" id="Dz9-HF-5zV"/>
-                            <constraint firstItem="0eV-h1-xLB" firstAttribute="centerX" secondItem="ZVo-zI-lnF" secondAttribute="centerX" id="Exg-e4-Zyn"/>
-                            <constraint firstItem="gb0-C5-Ddc" firstAttribute="top" secondItem="0eV-h1-xLB" secondAttribute="bottom" constant="10" id="HyA-Ll-2jf"/>
                             <constraint firstItem="b1K-5D-umH" firstAttribute="top" secondItem="GV6-dn-r3s" secondAttribute="bottom" constant="40" id="LJq-sq-nc8"/>
                             <constraint firstItem="b1K-5D-umH" firstAttribute="centerX" secondItem="ZVo-zI-lnF" secondAttribute="centerX" id="NyJ-3g-Dne"/>
                             <constraint firstItem="GV6-dn-r3s" firstAttribute="top" secondItem="gb0-C5-Ddc" secondAttribute="bottom" constant="192" id="Ojr-HW-clW"/>
@@ -110,7 +91,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="b1K-5D-umH" secondAttribute="trailing" constant="2" id="S2N-ze-uMx"/>
                             <constraint firstAttribute="trailingMargin" secondItem="b1K-5D-umH" secondAttribute="trailing" constant="50" id="SES-AK-Bcx"/>
                             <constraint firstAttribute="trailingMargin" secondItem="GV6-dn-r3s" secondAttribute="trailing" constant="5" id="UxY-KC-wyG"/>
-                            <constraint firstItem="b1K-5D-umH" firstAttribute="centerY" secondItem="ZVo-zI-lnF" secondAttribute="centerY" constant="50" id="Uzq-pB-PWJ"/>
+                            <constraint firstItem="b1K-5D-umH" firstAttribute="centerY" secondItem="ZVo-zI-lnF" secondAttribute="centerY" constant="-50" id="Uzq-pB-PWJ"/>
                             <constraint firstItem="Lkr-Cw-Inf" firstAttribute="leading" secondItem="ZVo-zI-lnF" secondAttribute="leadingMargin" constant="10" id="ViW-TK-sQD"/>
                             <constraint firstAttribute="trailingMargin" secondItem="GV6-dn-r3s" secondAttribute="trailing" constant="2" id="Wzd-ZW-8lm"/>
                             <constraint firstItem="b1K-5D-umH" firstAttribute="leading" secondItem="ZVo-zI-lnF" secondAttribute="leadingMargin" constant="50" id="Z7r-ui-B4U"/>
@@ -122,7 +103,6 @@
                             <constraint firstItem="gb0-C5-Ddc" firstAttribute="top" secondItem="R2u-e7-ktE" secondAttribute="bottom" constant="107" id="jCS-dB-t4w"/>
                             <constraint firstItem="GV6-dn-r3s" firstAttribute="top" secondItem="gb0-C5-Ddc" secondAttribute="bottom" constant="20" id="k9m-ub-ndZ"/>
                             <constraint firstItem="GV6-dn-r3s" firstAttribute="leading" secondItem="ZVo-zI-lnF" secondAttribute="leadingMargin" constant="25" id="l7j-aj-O4T"/>
-                            <constraint firstItem="gb0-C5-Ddc" firstAttribute="top" secondItem="0eV-h1-xLB" secondAttribute="bottom" constant="10" id="ocX-VL-UE7"/>
                             <constraint firstItem="b1K-5D-umH" firstAttribute="leading" secondItem="ZVo-zI-lnF" secondAttribute="leadingMargin" constant="2" id="ozm-5t-5cp"/>
                             <constraint firstAttribute="centerX" secondItem="gb0-C5-Ddc" secondAttribute="centerX" id="rhx-k5-bVA"/>
                         </constraints>
@@ -134,17 +114,14 @@
                                 <exclude reference="eOu-wY-L4h"/>
                                 <exclude reference="hIu-9f-nxp"/>
                                 <exclude reference="l7j-aj-O4T"/>
-                                <exclude reference="ACo-AR-8Jb"/>
-                                <exclude reference="Dz9-HF-5zV"/>
-                                <exclude reference="jCS-dB-t4w"/>
-                                <exclude reference="ocX-VL-UE7"/>
-                                <exclude reference="rhx-k5-bVA"/>
                                 <exclude reference="2Uo-rN-Pd7"/>
                                 <exclude reference="LJq-sq-nc8"/>
                                 <exclude reference="NyJ-3g-Dne"/>
                                 <exclude reference="Qi7-hr-nU8"/>
                                 <exclude reference="SES-AK-Bcx"/>
                                 <exclude reference="Z7r-ui-B4U"/>
+                                <exclude reference="jCS-dB-t4w"/>
+                                <exclude reference="rhx-k5-bVA"/>
                                 <exclude reference="1XC-LX-KkS"/>
                                 <exclude reference="RBq-M8-mSe"/>
                             </mask>
@@ -155,11 +132,6 @@
                     </view>
                     <navigationItem key="navigationItem" title="Mattermost" id="xSX-If-8pD">
                         <barButtonItem key="backBarButtonItem" title="Team" id="1nr-bu-B2O"/>
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="cDo-8R-qQu">
-                            <connections>
-                                <action selector="nextClick:" destination="Bmq-lJ-KWD" id="WqT-7J-M5Z"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="errorLabel" destination="Lkr-Cw-Inf" id="8px-RG-6dL"/>
@@ -509,8 +481,5 @@
             <point key="canvasLocation" x="-941" y="-2047"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="logo" width="76" height="76"/>
-    </resources>
     <color key="tintColor" red="0.38039215686274508" green="0.68627450980392157" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
