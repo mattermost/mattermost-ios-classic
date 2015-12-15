@@ -48,7 +48,7 @@ class Utils {
             return true
         }
                 
-        if (now - time < 60) {
+        if (now - time < 300) {
             return false
         }
 
