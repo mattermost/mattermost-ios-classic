@@ -24,7 +24,14 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
         api.initBaseUrl();
         let defaults = NSUserDefaults.standardUserDefaults()
         let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
-        api.findTeamByName(teamName!)
+        
+        if (teamName == nil) {
+            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+            urlField.layer.borderColor = UIColor.redColor().CGColor
+            
+        } else {
+            api.findTeamByName(teamName!)
+        }
     }
     
     override func viewDidLoad() {
@@ -61,7 +68,18 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
     }
         
     func didRecieveError(message: String) {
-        Utils.HandleUIError(message, label: errorLabel)
+        if (message.containsString("-1003")) {
+            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+        } else if (message.containsString("-1002")) {
+            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+        } else if (message.containsString("Invalid domain parameter")) {
+            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+        } else if (message.containsString("(-1)")) {
+            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+        } else {
+            Utils.HandleUIError(message, label: errorLabel)
+        }
+        
         urlField.layer.borderColor = UIColor.redColor().CGColor
     }
 }
