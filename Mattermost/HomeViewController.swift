@@ -91,6 +91,12 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
             return false
         }
         
+        // If something is being loaded in an iframe then do not open in a new tab
+        let isIFrame = request.URL?.absoluteString != request.mainDocumentURL?.absoluteString
+        if (isIFrame) {
+            return true
+        }
+        
         // Open all external links in another browser
         if (!currentUrl.containsString((request.URL?.host)!)) {
             UIApplication.sharedApplication().openURL(request.URL!)
