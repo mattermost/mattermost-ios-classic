@@ -68,7 +68,7 @@
                                 <rect key="frame" x="22" y="229.5" width="556" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <inset key="contentEdgeInsets" minX="60" minY="10" maxX="60" maxY="10"/>
-                                <state key="normal" title="Proceed"/>
+                                <state key="normal" title="Next"/>
                                 <connections>
                                     <action selector="proceedClick:" destination="Bmq-lJ-KWD" eventType="touchUpInside" id="7lm-Pm-XZW"/>
                                 </connections>
