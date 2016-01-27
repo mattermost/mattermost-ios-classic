@@ -51,6 +51,11 @@ public class MattermostApi: NSObject {
         connection.start()
     }
     
+    func attachDeviceId() {
+        let connection = doPost("/api/v1/users/attach_device", data: JSON(["device_id": "apple:" + Utils.getProp(DEVICE_TOKEN)]))
+        connection.start()
+    }
+    
     func findTeamByName(name: String) {
         let connection = doPost("/api/v1/teams/find_team_by_name", data: JSON(["name": name]))
         connection.start()

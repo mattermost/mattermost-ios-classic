@@ -60,7 +60,7 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
     
     func didRecieveResponse(results: JSON) {
         if ("true" == results.rawString()) {
-            self.performSegueWithIdentifier("email_pwd_controller", sender: self)
+            self.performSegueWithIdentifier("home_view", sender: self)
         } else {
             Utils.HandleUIError(NSLocalizedString("SIGNIN_NO_TEAM", comment: "The team does not appear to exist."), label: errorLabel)
             urlField.layer.borderColor = UIColor.redColor().CGColor

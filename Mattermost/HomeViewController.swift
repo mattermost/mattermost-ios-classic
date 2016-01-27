@@ -12,11 +12,13 @@ class MyURLProtocol: NSURLProtocol {
     } 
 }
 
-class HomeViewController: UIViewController, UIWebViewDelegate  {
+class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProtocol  {
         
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var webView: UIWebView!
     var currentUrl: String = ""
+    
+    var api: MattermostApi = MattermostApi()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
         webView.delegate = self
         webView.scrollView.bounces = false
         self.navigationController?.navigationBarHidden = true
+        api.delegate = self
         
         let type: UIUserNotificationType = [UIUserNotificationType.Badge, UIUserNotificationType.Alert, UIUserNotificationType.Sound];
         let setting = UIUserNotificationSettings(forTypes: type, categories: nil);
@@ -45,7 +48,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
         let defaults = NSUserDefaults.standardUserDefaults()
         let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
         currentUrl = defaults.stringForKey(CURRENT_URL)!
-        let fullUrl = currentUrl + "/" + teamName! + "/channels/town-square"
+        let fullUrl = currentUrl + "/" + teamName!
         
         if (!force) {
             if let webViewUrl = webView.request?.URL!.absoluteString {
@@ -72,14 +75,17 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
     
     func webViewDidFinishLoad(webView: UIWebView) {
         activityIndicator.stopAnimating()
-        
+
         let mmsid = Utils.getCookie(MATTERM_TOKEN)
-        
+        Utils.setProp(MATTERM_TOKEN, value: mmsid)
         if (mmsid == "") {
-            print("session expired or user logged out")
-            if let navController = self.navigationController {
-                self.navigationController?.navigationBarHidden = false
-                navController.popViewControllerAnimated(true)
+            Utils.setProp(CURRENT_USER, value: "")
+            Utils.setProp(MATTERM_TOKEN, value: "")
+            Utils.setProp(ATTACHED_DEVICE, value: "")
+        } else {
+            if (Utils.getProp(ATTACHED_DEVICE) != "true") {
+                print("Attaching device id to session")
+                api.attachDeviceId()
             }
         }
     }
@@ -117,11 +123,31 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
             UIApplication.sharedApplication().openURL(request.URL!)
             return false
         }
+        
+        // If we access the root then send them back to the iOS root page
+        if (currentUrl + "/" == request.URL?.absoluteString) {
+            if let navController = self.navigationController {
+                self.navigationController?.navigationBarHidden = false
+                navController.popViewControllerAnimated(true)
+            }
+            
+            return true
+        }
 
         return true
     }
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         print(error)
+    }
+    
+    func didRecieveResponse(results: JSON) {
+        print("Successfully attached device id to session")
+        Utils.setProp(ATTACHED_DEVICE, value: "true")
+    }
+    
+    func didRecieveError(message: String) {
+        print("Failed attaching device id to session")
+        print(message)
     }
 }

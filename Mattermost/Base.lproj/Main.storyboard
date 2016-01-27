@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Tb4-yk-oRs">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Tb4-yk-oRs">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -137,7 +137,7 @@
                         <outlet property="errorLabel" destination="Lkr-Cw-Inf" id="8px-RG-6dL"/>
                         <outlet property="proceedButton" destination="b1K-5D-umH" id="hYg-R2-NNb"/>
                         <outlet property="urlField" destination="GV6-dn-r3s" id="3oR-vs-V58"/>
-                        <segue destination="pl2-Pa-x2H" kind="show" identifier="email_pwd_controller" id="fag-ya-bo6"/>
+                        <segue destination="jqR-jB-aid" kind="show" identifier="home_view" id="5aa-a4-xdk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NTd-QT-iJH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -274,12 +274,11 @@
                         <outlet property="passwordField" destination="Gjl-iX-X51" id="C9q-6K-IpU"/>
                         <outlet property="proceedButton" destination="hTj-CR-wEe" id="h9S-ny-yGk"/>
                         <outlet property="teamTitle" destination="wcy-Ed-UWC" id="i9L-gC-1of"/>
-                        <segue destination="jqR-jB-aid" kind="show" identifier="home_view" id="fuR-2E-z75"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H4j-aG-nub" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="688" y="-2299"/>
+            <point key="canvasLocation" x="756" y="-1599"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="Eu1-Gz-jLt">
