@@ -12,11 +12,13 @@ class MyURLProtocol: NSURLProtocol {
     } 
 }
 
-class HomeViewController: UIViewController, UIWebViewDelegate  {
+class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProtocol  {
         
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var webView: UIWebView!
     var currentUrl: String = ""
+    
+    var api: MattermostApi = MattermostApi()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
         webView.delegate = self
         webView.scrollView.bounces = false
         self.navigationController?.navigationBarHidden = true
+        api.delegate = self
         
         let type: UIUserNotificationType = [UIUserNotificationType.Badge, UIUserNotificationType.Alert, UIUserNotificationType.Sound];
         let setting = UIUserNotificationSettings(forTypes: type, categories: nil);
@@ -78,15 +81,13 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
         if (mmsid == "") {
             Utils.setProp(CURRENT_USER, value: "")
             Utils.setProp(MATTERM_TOKEN, value: "")
+            Utils.setProp(ATTACHED_DEVICE, value: "")
+        } else {
+            if (Utils.getProp(ATTACHED_DEVICE) != "true") {
+                print("Attaching device id to session")
+                api.attachDeviceId()
+            }
         }
-
-//        if (mmsid == "") {
-//            print("session expired or user logged out")
-//            if let navController = self.navigationController {
-//                self.navigationController?.navigationBarHidden = false
-//                navController.popViewControllerAnimated(true)
-//            }
-//        }
     }
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
@@ -138,5 +139,15 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         print(error)
+    }
+    
+    func didRecieveResponse(results: JSON) {
+        print("Successfully attached device id to session")
+        Utils.setProp(ATTACHED_DEVICE, value: "true")
+    }
+    
+    func didRecieveError(message: String) {
+        print("Failed attaching device id to session")
+        print(message)
     }
 }

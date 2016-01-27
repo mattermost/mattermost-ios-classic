@@ -3,6 +3,7 @@
 
 import UIKit
 
+let ATTACHED_DEVICE = "AttachedDevice"
 let MATTERM_TOKEN = "MMTOKEN"
 let DEVICE_TOKEN = "DeviceToken"
 let CURRENT_USER = "CurrentUser"
