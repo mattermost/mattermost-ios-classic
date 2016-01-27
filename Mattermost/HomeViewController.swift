@@ -45,7 +45,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
         let defaults = NSUserDefaults.standardUserDefaults()
         let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
         currentUrl = defaults.stringForKey(CURRENT_URL)!
-        let fullUrl = currentUrl + "/" + teamName! + "/channels/town-square"
+        let fullUrl = currentUrl + "/" + teamName!
         
         if (!force) {
             if let webViewUrl = webView.request?.URL!.absoluteString {
@@ -72,16 +72,21 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
     
     func webViewDidFinishLoad(webView: UIWebView) {
         activityIndicator.stopAnimating()
-        
+
         let mmsid = Utils.getCookie(MATTERM_TOKEN)
-        
+        Utils.setProp(MATTERM_TOKEN, value: mmsid)
         if (mmsid == "") {
-            print("session expired or user logged out")
-            if let navController = self.navigationController {
-                self.navigationController?.navigationBarHidden = false
-                navController.popViewControllerAnimated(true)
-            }
+            Utils.setProp(CURRENT_USER, value: "")
+            Utils.setProp(MATTERM_TOKEN, value: "")
         }
+
+//        if (mmsid == "") {
+//            print("session expired or user logged out")
+//            if let navController = self.navigationController {
+//                self.navigationController?.navigationBarHidden = false
+//                navController.popViewControllerAnimated(true)
+//            }
+//        }
     }
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
@@ -116,6 +121,16 @@ class HomeViewController: UIViewController, UIWebViewDelegate  {
         if (currentUrl.containsString((request.URL?.host)!) && isFile) {
             UIApplication.sharedApplication().openURL(request.URL!)
             return false
+        }
+        
+        // If we access the root then send them back to the iOS root page
+        if (currentUrl + "/" == request.URL?.absoluteString) {
+            if let navController = self.navigationController {
+                self.navigationController?.navigationBarHidden = false
+                navController.popViewControllerAnimated(true)
+            }
+            
+            return true
         }
 
         return true
