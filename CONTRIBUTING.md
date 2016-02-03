@@ -1,1 +1,3 @@
-Please see: https://github.com/mattermost/platform/blob/master/CONTRIBUTING.md
+# Code Contribution Guidelines
+
+Please see the [Mattermost Contribution Guide](http://docs.mattermost.com/developer/contribution-guide.html) which describes the process for making code contributions across Mattermost projects. 
