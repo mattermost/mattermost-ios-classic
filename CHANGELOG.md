@@ -1,4 +1,13 @@
-# Mattermost Changelog
+# Mattermost iOS Application Changelog
+
+## IN-PROGRESS Release v2.0.0  
+
+### Features   
+- Added support for GitLab single-sign-on 
+- Added support for Active Directory and LDAP single-sign-on (available with pre-released Mattermost Enterprise Edition)  
+
+### Breaking change  
+- New APIs used to enable single-sign-on options require connecting to Mattermost server version 2.0 or later
 
 ## Release v1.0.0
 
