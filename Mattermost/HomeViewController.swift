@@ -93,6 +93,14 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         print(request.URL?.absoluteString)
         
+        // If we access the root then send them back to the iOS root page
+        if (currentUrl + "/" == request.URL?.absoluteString) {
+            if let navController = self.navigationController {
+                self.navigationController?.navigationBarHidden = false
+                navController.popViewControllerAnimated(true)
+            }
+        }
+        
         if ("about:blank" == request.URL?.absoluteString) {
             return false
         }
@@ -129,16 +137,6 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
             return false
         }
         
-        // If we access the root then send them back to the iOS root page
-        if (currentUrl + "/" == request.URL?.absoluteString) {
-            if let navController = self.navigationController {
-                self.navigationController?.navigationBarHidden = false
-                navController.popViewControllerAnimated(true)
-            }
-            
-            return true
-        }
-
         return true
     }
     
