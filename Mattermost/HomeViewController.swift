@@ -97,6 +97,11 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
             return false
         }
         
+        let mmsid = Utils.getCookie(MATTERM_TOKEN)
+        if (mmsid == "") {
+            return true
+        }
+        
         // If something is being loaded in an iframe then do not open in a new tab
         let isIFrame = request.URL?.absoluteString != request.mainDocumentURL?.absoluteString
         if (isIFrame) {
