@@ -7,7 +7,7 @@
 - Added support for Active Directory and LDAP single-sign-on (available with pre-released Mattermost Enterprise Edition)  
 
 ### Breaking change  
-- New APIs used to enable single-sign-on options require connecting to Mattermost server version 2.0 or later
+- New APIs used to enable single-sign-on options require connecting to [Mattermost server version 2.0 or later](https://github.com/mattermost/platform/blob/master/CHANGELOG.md)
 
 ## Release v1.0.0
 
