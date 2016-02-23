@@ -1,6 +1,6 @@
 # Mattermost iOS Application Changelog
 
-## IN-PROGRESS Release v2.0.0  
+## Release v2.0.0  
 
 ### Features   
 - Added support for GitLab single-sign-on 
