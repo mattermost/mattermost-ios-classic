@@ -17,8 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
         
         if (token != nil && (token!).characters.count > 0) {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let loginInView = storyboard.instantiateViewControllerWithIdentifier("EmailPasswordView") 
-            signInController.pushViewController(loginInView, animated: false)
+            
+            //let loginInView = storyboard.instantiateViewControllerWithIdentifier("EmailPasswordView")
+            //signInController.pushViewController(loginInView, animated: false)
             
             let HomeView = storyboard.instantiateViewControllerWithIdentifier("HomeView") 
             signInController.pushViewController(HomeView, animated: false)

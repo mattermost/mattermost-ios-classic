@@ -16,6 +16,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var webView: UIWebView!
+    @IBOutlet weak var backButton: UIBarButtonItem!
     var currentUrl: String = ""
     
     var api: MattermostApi = MattermostApi()
@@ -90,6 +91,33 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         }
     }
     
+    @IBAction func back(sender: AnyObject) {
+        self.navigationController?.navigationBarHidden = true
+        doRootView(true);
+    }
+    
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+        activityIndicator.stopAnimating()
+        print("Home view fail with error \(error)");
+        
+        let refreshAlert = UIAlertController(title: "Loading Error", message: "The Mattermost server you're trying to connect to is experiencing problems.", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Refresh", style: .Default, handler: { (action: UIAlertAction!) in
+            print("Attempting refresh")
+            self.doRootView(true);
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "Logout", style: .Default, handler: { (action: UIAlertAction!) in
+            print("Attempting logout")
+            if let navController = self.navigationController {
+                self.navigationController?.navigationBarHidden = false
+                navController.popViewControllerAnimated(true)
+            }
+        }))
+        
+        presentViewController(refreshAlert, animated: true, completion: nil)
+    }
+    
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         print(request.URL?.absoluteString)
         
@@ -105,6 +133,13 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
             return false
         }
         
+        // Open mailto: another browser
+        let isMailTo = request.URL?.absoluteString.hasPrefix("mailto:") ?? false
+        if (isMailTo) {
+            UIApplication.sharedApplication().openURL(request.URL!)
+            return false
+        }
+        
         let mmsid = Utils.getCookie(MATTERM_TOKEN)
         if (mmsid == "") {
             return true
@@ -115,6 +150,8 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         if (isIFrame) {
             return true
         }
+        
+        
         
         // Open all external links in another browser
         if (!currentUrl.containsString((request.URL?.host)!)) {
@@ -129,19 +166,22 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
             UIApplication.sharedApplication().openURL(request.URL!)
             return false
         }
-
+        
         // Open file download link in another browser
+//        let isFile  = request.URL?.path?.containsString("/api/v1/files/get/") ?? false
+//        if (currentUrl.containsString((request.URL?.host)!) && isFile) {
+//            UIApplication.sharedApplication().openURL(request.URL!)
+//            return false
+//        }
+        
         let isFile  = request.URL?.path?.containsString("/api/v1/files/get/") ?? false
         if (currentUrl.containsString((request.URL?.host)!) && isFile) {
-            UIApplication.sharedApplication().openURL(request.URL!)
-            return false
+            self.navigationController?.navigationBarHidden = false
+            return true
         }
+
         
         return true
-    }
-    
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
-        print(error)
     }
     
     func didRecieveResponse(results: JSON) {

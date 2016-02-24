@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Tb4-yk-oRs">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Tb4-yk-oRs">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -280,7 +280,7 @@
             </objects>
             <point key="canvasLocation" x="756" y="-1599"/>
         </scene>
-        <!--Home View Controller-->
+        <!--Viewer-->
         <scene sceneID="Eu1-Gz-jLt">
             <objects>
                 <viewController storyboardIdentifier="HomeView" id="jqR-jB-aid" customClass="HomeViewController" customModule="Mattermost" customModuleProvider="target" sceneMemberID="viewController">
@@ -331,8 +331,16 @@
                         </variation>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationItem key="navigationItem" title="Viewer" id="5L9-vt-w1p">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="JRv-dz-rZJ">
+                            <connections>
+                                <action selector="back:" destination="jqR-jB-aid" id="Apa-Yi-oOa"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="CTC-Ae-BI3" id="buI-wm-pHt"/>
+                        <outlet property="backButton" destination="JRv-dz-rZJ" id="KkH-GE-p4y"/>
                         <outlet property="webView" destination="VLP-5K-hJS" id="X7f-at-DgE"/>
                     </connections>
                 </viewController>

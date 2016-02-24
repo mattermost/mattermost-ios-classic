@@ -56,7 +56,12 @@ class Utils {
         return true
     }
     
-    class func setTeamUrl(teamUrl: String) {
+    class func setTeamUrl(var teamUrl: String) {
+        
+        if (teamUrl[teamUrl.endIndex.advancedBy(-1)] == "/") {
+            teamUrl = teamUrl.substringToIndex(teamUrl.endIndex.advancedBy(-1))
+        }
+        
         let index = teamUrl.rangeOfString("/", options: .BackwardsSearch)?.startIndex
         if (index != nil) {
             setProp(CURRENT_URL, value: teamUrl.substringToIndex(index!))
