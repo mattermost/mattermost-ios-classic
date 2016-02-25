@@ -100,7 +100,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         activityIndicator.stopAnimating()
         print("Home view fail with error \(error)");
         
-        let refreshAlert = UIAlertController(title: "Loading Error", message: "The Mattermost server you're trying to connect to is experiencing problems.", preferredStyle: UIAlertControllerStyle.Alert)
+        let refreshAlert = UIAlertController(title: "Loading Error", message: "You may be offline or the Mattermost server you're trying to connect to is experiencing problems.", preferredStyle: UIAlertControllerStyle.Alert)
         
         refreshAlert.addAction(UIAlertAction(title: "Refresh", style: .Default, handler: { (action: UIAlertAction!) in
             print("Attempting refresh")
