@@ -4,7 +4,7 @@
 import UIKit
 
 let ATTACHED_DEVICE = "AttachedDevice"
-let MATTERM_TOKEN = "MMTOKEN"
+let MATTERM_TOKEN = "MMAUTHTOKEN"
 let DEVICE_TOKEN = "DeviceToken"
 let CURRENT_USER = "CurrentUser"
 let CURRENT_USER_EMAIL = "CurrentUserEmail"
@@ -54,6 +54,14 @@ class Utils {
         }
 
         return true
+    }
+    
+    class func setServerUrl(var serverUrl: String) {
+        if (serverUrl.characters.count != 0 && serverUrl[serverUrl.endIndex.advancedBy(-1)] == "/") {
+            serverUrl = serverUrl.substringToIndex(serverUrl.endIndex.advancedBy(-1))
+        }
+        
+        setProp(CURRENT_URL, value: serverUrl)
     }
     
     class func setTeamUrl(var teamUrl: String) {

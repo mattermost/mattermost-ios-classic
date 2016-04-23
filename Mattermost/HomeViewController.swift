@@ -5,24 +5,76 @@ import UIKit
 
 class MyURLProtocol: NSURLProtocol {
     override class func canInitWithRequest(request: NSURLRequest) -> Bool {
+        
+//        if let hv = homeView {
+//            let isLogout  = request.URL?.path?.containsString("/users/logout") ?? false
+//            if (hv.currentUrl.containsString((request.URL?.host)!) && isLogout) {
+//                hv.longPress()
+//                return true
+//            }
+//        }
+        
 //        if (request.URL!.path == "/logout") {
 //            logoutCalled = true
+//            
 //        }
+        
+//        NSLog(request.URL!.path!)
+        
         return false
     } 
 }
 
-class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProtocol  {
-        
+var homeView: HomeViewController?
+
+class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProtocol, UIGestureRecognizerDelegate  {
+    
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var webView: UIWebView!
     @IBOutlet weak var backButton: UIBarButtonItem!
     var currentUrl: String = ""
+    var errorCount = 0
     
     var api: MattermostApi = MattermostApi()
     
+    func longPress() {
+        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
+        
+        let deleteAction = UIAlertAction(title: "Select Different Server", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            
+            print("Attempting logout")
+            if let navController = self.navigationController {
+                self.navigationController?.navigationBarHidden = false
+                navController.popViewControllerAnimated(true)
+            }
+        })
+        
+        let saveAction = UIAlertAction(title: "Refresh", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            print("Attempting refresh")
+            self.doRootView(true);
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+        })
+        
+        optionMenu.addAction(deleteAction)
+        optionMenu.addAction(saveAction)
+        optionMenu.addAction(cancelAction)
+        
+        self.presentViewController(optionMenu, animated: true, completion: nil)
+    }
+    
+    func gestureRecognizer(_: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWithGestureRecognizer:UIGestureRecognizer) -> Bool {
+            return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        homeView = self
         NSURLProtocol.registerClass(MyURLProtocol)
         webView.delegate = self
         webView.scrollView.bounces = false
@@ -33,6 +85,11 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         let setting = UIUserNotificationSettings(forTypes: type, categories: nil);
         UIApplication.sharedApplication().registerUserNotificationSettings(setting);
         UIApplication.sharedApplication().registerForRemoteNotifications();
+        
+        let lpg = UILongPressGestureRecognizer(target:self, action:"longPress")
+        lpg.minimumPressDuration = 0.3
+        
+        webView.addGestureRecognizer(lpg)
         
         doRootView()
     }
@@ -47,9 +104,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         activityIndicator.startAnimating()
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
         currentUrl = defaults.stringForKey(CURRENT_URL)!
-        let fullUrl = currentUrl + "/" + teamName!
         
         if (!force) {
             if let webViewUrl = webView.request?.URL!.absoluteString {
@@ -61,7 +116,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
             }
         }
         
-        let url = NSURL(string: fullUrl)
+        let url = NSURL(string: currentUrl)
         let request = NSURLRequest(URL: url!)
         webView.loadRequest(request)
     }
@@ -89,6 +144,8 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
                 api.attachDeviceId()
             }
         }
+        
+        webView.stringByEvaluatingJavaScriptFromString("document.body.style.webkitTouchCallout='none';")
     }
     
     @IBAction func back(sender: AnyObject) {
@@ -99,6 +156,14 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         activityIndicator.stopAnimating()
         print("Home view fail with error \(error)");
+        
+        if errorCount < 3 {
+            self.doRootView(true);
+            errorCount = errorCount + 1
+            return
+        }
+        
+        errorCount = 0
         
         let refreshAlert = UIAlertController(title: "Loading Error", message: "You may be offline or the Mattermost server you're trying to connect to is experiencing problems.", preferredStyle: UIAlertControllerStyle.Alert)
         
@@ -120,14 +185,6 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         print(request.URL?.absoluteString)
-        
-        // If we access the root then send them back to the iOS root page
-        if (currentUrl + "/" == request.URL?.absoluteString) {
-            if let navController = self.navigationController {
-                self.navigationController?.navigationBarHidden = false
-                navController.popViewControllerAnimated(true)
-            }
-        }
         
         if ("about:blank" == request.URL?.absoluteString) {
             return false
@@ -151,8 +208,6 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
             return true
         }
         
-        
-        
         // Open all external links in another browser
         if (!currentUrl.containsString((request.URL?.host)!)) {
             UIApplication.sharedApplication().openURL(request.URL!)
@@ -167,19 +222,11 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
             return false
         }
         
-        // Open file download link in another browser
-//        let isFile  = request.URL?.path?.containsString("/api/v1/files/get/") ?? false
-//        if (currentUrl.containsString((request.URL?.host)!) && isFile) {
-//            UIApplication.sharedApplication().openURL(request.URL!)
-//            return false
-//        }
-        
-        let isFile  = request.URL?.path?.containsString("/api/v1/files/get/") ?? false
+        let isFile  = request.URL?.path?.containsString("/api/v3/files/get/") ?? false
         if (currentUrl.containsString((request.URL?.host)!) && isFile) {
             self.navigationController?.navigationBarHidden = false
             return true
         }
-
         
         return true
     }

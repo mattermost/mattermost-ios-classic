@@ -11,6 +11,8 @@ protocol MattermostApiProtocol {
 
 public class MattermostApi: NSObject {
     
+    static let API_ROUTE = "/api/v3"
+    
     var baseUrl = ""
     var data: NSMutableData = NSMutableData()
     var statusCode = 200
@@ -35,51 +37,68 @@ public class MattermostApi: NSObject {
         let url: NSURL = NSURL(string: baseUrl + url)!
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
+        request.addValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
         request.HTTPBody = try! data.rawData()
         let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
         
         return connection
     }
     
-    func signup(email: String, name: String) {
-        let connection = doPost("/api/v1/teams/signup", data: JSON(["email": email, "name" : name]))
-        connection.start()
+    func doGet(url: String) ->  NSURLConnection {
+        print(baseUrl + url)
+        let url: NSURL = NSURL(string: baseUrl + url)!
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.addValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
+        let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
+        
+        return connection
     }
     
-    func findTeams(email: String) {
-        let connection = doPost("/api/v1/teams/email_teams", data: JSON(["email": email]))
-        connection.start()
-    }
+//    func signup(email: String, name: String) {
+//        let connection = doPost("/api/v1/teams/signup", data: JSON(["email": email, "name" : name]))
+//        connection.start()
+//    }
+    
+//    func findTeams(email: String) {
+//        let connection = doPost("/api/v1/teams/email_teams", data: JSON(["email": email]))
+//        connection.start()
+//    }
     
     func attachDeviceId() {
-        let connection = doPost("/api/v1/users/attach_device", data: JSON(["device_id": "apple:" + Utils.getProp(DEVICE_TOKEN)]))
+        let connection = doPost(MattermostApi.API_ROUTE + "/users/attach_device", data: JSON(["device_id": "apple:" + Utils.getProp(DEVICE_TOKEN)]))
         connection.start()
     }
     
-    func findTeamByName(name: String) {
-        let connection = doPost("/api/v1/teams/find_team_by_name", data: JSON(["name": name]))
+    func getInitialLoad() {
+        let connection = doGet(MattermostApi.API_ROUTE + "/users/initial_load")
         connection.start()
     }
     
-    func login(email: String, password: String) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
-        var json :JSON = ["name":teamName!]
-        json["email"] = JSON(email)
-        json["password"] = JSON(password)
-        json["device_id"] = JSON("apple:" + Utils.getProp(DEVICE_TOKEN))
-        let connection = doPost("/api/v1/users/login", data: json)
-        connection.start()
-    }
+//    func findTeamByName(name: String) {
+//        let connection = doPost("/api/v1/teams/find_team_by_name", data: JSON(["name": name]))
+//        connection.start()
+//    }
     
-    func forgotPassword(email: String) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
-        var json :JSON = ["name":teamName!]
-        json["email"] = JSON(email)
-        let connection = doPost("/api/v1/users/send_password_reset", data: json)
-        connection.start()
-    }
+//    func login(email: String, password: String) {
+//        let defaults = NSUserDefaults.standardUserDefaults()
+//        let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
+//        var json :JSON = ["name":teamName!]
+//        json["email"] = JSON(email)
+//        json["password"] = JSON(password)
+//        json["device_id"] = JSON("apple:" + Utils.getProp(DEVICE_TOKEN))
+//        let connection = doPost("/api/v1/users/login", data: json)
+//        connection.start()
+//    }
+    
+//    func forgotPassword(email: String) {
+//        let defaults = NSUserDefaults.standardUserDefaults()
+//        let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
+//        var json :JSON = ["name":teamName!]
+//        json["email"] = JSON(email)
+//        let connection = doPost("/api/v1/users/send_password_reset", data: json)
+//        connection.start()
+//    }
     
     func connection(connection: NSURLConnection!, didFailWithError error: NSError!) {
         statusCode = error.code

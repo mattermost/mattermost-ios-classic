@@ -25,7 +25,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, Matte
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         emailField.resignFirstResponder()
-        api.forgotPassword(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString)
+//        api.forgotPassword(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString)
         return true
     }
     
@@ -34,7 +34,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, Matte
     }
     
     @IBAction func resetClick(sender: AnyObject) {
-        api.forgotPassword(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString)
+//        api.forgotPassword(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString)
     }
     
     override func didReceiveMemoryWarning() {

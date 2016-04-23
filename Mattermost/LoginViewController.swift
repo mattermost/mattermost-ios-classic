@@ -37,12 +37,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate, MattermostApiP
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         emailField.resignFirstResponder()
-        api.login(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString, password: passwordField.text!)
+//        api.login(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString, password: passwordField.text!)
         return true
     }
     
     @IBAction func proceedClick(sender: AnyObject) {
-        api.login(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString, password: passwordField.text!)
+//        api.login(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString, password: passwordField.text!)
     }
     
     @IBAction func dismissKeyboard(sender: AnyObject) {

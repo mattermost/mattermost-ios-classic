@@ -3,4 +3,4 @@
 
 UNKOWN_ERR = "An unknown error has occured. (-1)";
 SIGNIN_NO_TEAM = "The team does not appear to exist.";
-TEAM_URL_NOT_FOUND = "Team URL not found";
+SERVER_NOT_FOUND = "We could not connect to the Mattermost server or the server running in an incompatible version.";

@@ -20,18 +20,16 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
     }
     
     func doNext() {
-        Utils.setTeamUrl(urlField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString)
-        api.initBaseUrl();
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
+        let serverUrl = urlField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString
         
-        if (teamName == nil) {
-            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
-            urlField.layer.borderColor = UIColor.redColor().CGColor
-            
-        } else {
-            api.findTeamByName(teamName!)
+        if (serverUrl.characters.count == 0) {
+            return
         }
+        
+        Utils.setServerUrl(serverUrl)
+        print("here")
+        api.initBaseUrl()
+        api.getInitialLoad()
     }
     
     override func viewDidLoad() {
@@ -42,6 +40,10 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
         proceedButton.layer.borderColor = proceedButton.titleLabel?.textColor.CGColor
         proceedButton.layer.borderWidth = 1.0
         proceedButton.layer.cornerRadius = 3.0
+        
+        Utils.setProp(CURRENT_USER, value: "")
+        Utils.setProp(MATTERM_TOKEN, value: "")
+        Utils.setProp(ATTACHED_DEVICE, value: "")
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -59,25 +61,34 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
     }
     
     func didRecieveResponse(results: JSON) {
-        if ("true" == results.rawString()) {
+        
+        var isValidServer = false
+                
+        if let version = results["client_cfg"]["Version"].string {
+            if version.characters.count > 0 {
+                isValidServer = true
+            }
+        }
+    
+        if (isValidServer) {
             self.performSegueWithIdentifier("home_view", sender: self)
         } else {
-            Utils.HandleUIError(NSLocalizedString("SIGNIN_NO_TEAM", comment: "The team does not appear to exist."), label: errorLabel)
+            Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
             urlField.layer.borderColor = UIColor.redColor().CGColor
         }
     }
         
     func didRecieveError(message: String) {
         if (message.containsString("-1003")) {
-            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+            Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
         } else if (message.containsString("-1002")) {
-            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+            Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version.d"), label: errorLabel)
         } else if (message.containsString("Invalid domain parameter")) {
-            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+            Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
         } else if (message.containsString("(-1)")) {
-            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+            Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
         } else if (message.containsString("UNKNOWN_ERR")) {
-            Utils.HandleUIError(NSLocalizedString("TEAM_URL_NOT_FOUND", comment: "Team URL not found"), label: errorLabel)
+            Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
         } else {
             Utils.HandleUIError(message, label: errorLabel)
         }
