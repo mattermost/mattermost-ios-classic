@@ -34,10 +34,17 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     @IBOutlet weak var backButton: UIBarButtonItem!
     var currentUrl: String = ""
     var errorCount = 0
+    var lpg: UILongPressGestureRecognizer!
+    var keyboardVisible = false
     
     var api: MattermostApi = MattermostApi()
     
     func longPress() {
+        //let point = lpg.locationInView(self.webView)
+        if (keyboardVisible) {
+            return
+        }
+        
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
         
         let deleteAction = UIAlertAction(title: "Select Different Server", style: .Default, handler: {
@@ -75,6 +82,10 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     override func viewDidLoad() {
         super.viewDidLoad()
         homeView = self
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+        
         NSURLProtocol.registerClass(MyURLProtocol)
         webView.delegate = self
         webView.scrollView.bounces = false
@@ -86,12 +97,25 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         UIApplication.sharedApplication().registerUserNotificationSettings(setting);
         UIApplication.sharedApplication().registerForRemoteNotifications();
         
-        let lpg = UILongPressGestureRecognizer(target:self, action:"longPress")
+        lpg = UILongPressGestureRecognizer(target:self, action:"longPress")
         lpg.minimumPressDuration = 0.3
         
         webView.addGestureRecognizer(lpg)
         
         doRootView()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func keyboardWillAppear(notification: NSNotification){
+        keyboardVisible = true
+    }
+    
+    func keyboardWillDisappear(notification: NSNotification){
+        keyboardVisible = false
     }
     
     func doBlank() {
