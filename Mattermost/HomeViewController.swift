@@ -246,7 +246,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
             return false
         }
         
-        let isFile  = request.URL?.path?.containsString("/api/v3/files/get/") ?? false
+        let isFile  = request.URL?.path?.containsString("/files/get/") ?? false
         if (currentUrl.containsString((request.URL?.host)!) && isFile) {
             self.navigationController?.navigationBarHidden = false
             return true
