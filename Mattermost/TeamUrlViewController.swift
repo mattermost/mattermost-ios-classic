@@ -44,6 +44,8 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
         Utils.setProp(CURRENT_USER, value: "")
         Utils.setProp(MATTERM_TOKEN, value: "")
         Utils.setProp(ATTACHED_DEVICE, value: "")
+        Utils.setProp(LAST_CHANNEL, value: "")
+        urlField.text = Utils.getServerUrl()
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {

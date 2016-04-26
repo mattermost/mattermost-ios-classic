@@ -11,6 +11,7 @@ let CURRENT_USER_EMAIL = "CurrentUserEmail"
 let CURRENT_TEAM_NAME = "CurrentTeamName"
 let CURRENT_URL = "CurrentUrl"
 let CURRENT_BACKGROUND_TIME = "CurrentBackTime"
+let LAST_CHANNEL = "LastChannel"
 
 let BASE_URL_MATTERMOST = ""
 
@@ -62,6 +63,10 @@ class Utils {
         }
         
         setProp(CURRENT_URL, value: serverUrl)
+    }
+    
+    class func getServerUrl() -> String! {
+        return getProp(CURRENT_URL)
     }
     
     class func setTeamUrl(var teamUrl: String) {

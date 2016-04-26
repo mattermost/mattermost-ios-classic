@@ -5,22 +5,35 @@ import UIKit
 
 class MyURLProtocol: NSURLProtocol {
     override class func canInitWithRequest(request: NSURLRequest) -> Bool {
+        //print("canInitWithRequest: " + (request.URL?.absoluteString)!)
         
-//        if let hv = homeView {
-//            let isLogout  = request.URL?.path?.containsString("/users/logout") ?? false
-//            if (hv.currentUrl.containsString((request.URL?.host)!) && isLogout) {
-//                hv.longPress()
-//                return true
-//            }
-//        }
+        let isServer = Utils.getServerUrl().containsString((request.URL?.host)!)
+        let app = UIApplication.sharedApplication().delegate as! AppDelegate
         
-//        if (request.URL!.path == "/logout") {
-//            logoutCalled = true
-//            
-//        }
-        
-//        NSLog(request.URL!.path!)
-        
+        let nav = app.window!.rootViewController as! UINavigationController
+        if let currentView = nav.visibleViewController as? HomeViewController {
+            
+            let isGetFile  = request.URL?.path?.containsString("/files/get/") ?? false
+            if (isServer && isGetFile) {
+                return false
+            }
+            
+            let isTownSquare  = request.URL?.path?.containsString("/channels/town-square") ?? false
+            if (isServer && isTownSquare) {
+                currentView.performSelectorOnMainThread("attemptToAttachDevice", withObject: nil, waitUntilDone: false)
+                return false
+            }
+            
+            let isLogout  = request.URL?.path?.containsString("/users/logout") ?? false
+            if (isServer && isLogout) {
+                print("logout detected")
+                currentView.performSelectorOnMainThread("logoutPressed", withObject: nil, waitUntilDone: false)
+                return false
+            }
+            
+            currentView.performSelectorOnMainThread("checkForRoot", withObject: nil, waitUntilDone: false)
+        }
+
         return false
     } 
 }
@@ -39,8 +52,44 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     
     var api: MattermostApi = MattermostApi()
     
+    func attemptToAttachDevice() {
+        let mmsid = Utils.getCookie(MATTERM_TOKEN)
+        if (mmsid != "") {
+            Utils.setProp(MATTERM_TOKEN, value: mmsid)
+            if (Utils.getProp(ATTACHED_DEVICE) != "true") {
+                print("Attaching device id to session")
+                api.attachDeviceId()
+            }
+        }
+    }
+    
+    func checkForRoot() {
+        let path = webView.stringByEvaluatingJavaScriptFromString("window.location.pathname")!
+        let server = webView.stringByEvaluatingJavaScriptFromString("window.location.hostname")!
+        let isServer = Utils.getServerUrl().containsString(server) ?? false
+        
+        //print("jspath: " + path)
+        
+        if isServer && path.containsString("/channels/") {
+            Utils.setProp(LAST_CHANNEL, value: path)
+        }
+
+        if isServer && path == "/login" {
+            self.navigationController?.navigationBarHidden = false
+            return
+        }
+        
+        self.navigationController?.navigationBarHidden = true
+    }
+    
+    func logoutPressed() {
+        if let navController = self.navigationController {
+            self.navigationController?.navigationBarHidden = false
+            navController.popViewControllerAnimated(true)
+        }
+    }
+    
     func longPress() {
-        //let point = lpg.locationInView(self.webView)
         if (keyboardVisible) {
             return
         }
@@ -97,10 +146,9 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         UIApplication.sharedApplication().registerUserNotificationSettings(setting);
         UIApplication.sharedApplication().registerForRemoteNotifications();
         
-        lpg = UILongPressGestureRecognizer(target:self, action:"longPress")
-        lpg.minimumPressDuration = 0.3
-        
-        webView.addGestureRecognizer(lpg)
+        //lpg = UILongPressGestureRecognizer(target:self, action:"longPress")
+        //lpg.minimumPressDuration = 0.3
+        //webView.addGestureRecognizer(lpg)
         
         doRootView()
     }
@@ -126,9 +174,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     func doRootView(force:Bool=false) {
         print("doRootView")
         activityIndicator.startAnimating()
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        currentUrl = defaults.stringForKey(CURRENT_URL)!
+        currentUrl = Utils.getServerUrl() + Utils.getProp(LAST_CHANNEL)
         
         if (!force) {
             if let webViewUrl = webView.request?.URL!.absoluteString {
@@ -155,26 +201,20 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     
     func webViewDidFinishLoad(webView: UIWebView) {
         activityIndicator.stopAnimating()
-
-        let mmsid = Utils.getCookie(MATTERM_TOKEN)
-        Utils.setProp(MATTERM_TOKEN, value: mmsid)
-        if (mmsid == "") {
-            Utils.setProp(CURRENT_USER, value: "")
-            Utils.setProp(MATTERM_TOKEN, value: "")
-            Utils.setProp(ATTACHED_DEVICE, value: "")
-        } else {
-            if (Utils.getProp(ATTACHED_DEVICE) != "true") {
-                print("Attaching device id to session")
-                api.attachDeviceId()
-            }
-        }
-        
-        webView.stringByEvaluatingJavaScriptFromString("document.body.style.webkitTouchCallout='none';")
+        //webView.stringByEvaluatingJavaScriptFromString("document.body.style.webkitTouchCallout='none';")
     }
     
     @IBAction func back(sender: AnyObject) {
         self.navigationController?.navigationBarHidden = true
-        doRootView(true);
+        
+        if Utils.getProp(LAST_CHANNEL).characters.count > 0 {
+            doRootView(true);
+        } else {
+            if let navController = self.navigationController {
+                self.navigationController?.navigationBarHidden = false
+                navController.popViewControllerAnimated(true)
+            }
+        }
     }
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
@@ -208,7 +248,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     }
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        print(request.URL?.absoluteString)
+        //print("shouldStartLoadWithRequest: " + (request.URL?.absoluteString)!)
         
         if ("about:blank" == request.URL?.absoluteString) {
             return false
@@ -240,12 +280,12 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         
         // Open help link in another browser
         let isHelp  = request.URL?.path?.containsString("/static/help") ?? false
-        
         if (currentUrl.containsString((request.URL?.host)!) && isHelp) {
             UIApplication.sharedApplication().openURL(request.URL!)
             return false
         }
         
+        // Open files in another browser
         let isFile  = request.URL?.path?.containsString("/files/get/") ?? false
         if (currentUrl.containsString((request.URL?.host)!) && isFile) {
             self.navigationController?.navigationBarHidden = false

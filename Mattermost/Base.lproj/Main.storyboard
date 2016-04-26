@@ -280,7 +280,7 @@
             </objects>
             <point key="canvasLocation" x="756" y="-1599"/>
         </scene>
-        <!--Viewer-->
+        <!--Mattermost-->
         <scene sceneID="Eu1-Gz-jLt">
             <objects>
                 <viewController storyboardIdentifier="HomeView" id="jqR-jB-aid" customClass="HomeViewController" customModule="Mattermost" customModuleProvider="target" sceneMemberID="viewController">
@@ -331,7 +331,7 @@
                         </variation>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" title="Viewer" id="5L9-vt-w1p">
+                    <navigationItem key="navigationItem" title="Mattermost" id="5L9-vt-w1p">
                         <barButtonItem key="leftBarButtonItem" title="Back" id="JRv-dz-rZJ">
                             <connections>
                                 <action selector="back:" destination="jqR-jB-aid" id="Apa-Yi-oOa"/>
