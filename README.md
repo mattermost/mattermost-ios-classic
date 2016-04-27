@@ -1,5 +1,7 @@
 # Mattermost iOS Application 
 
+Note: The iOS app is being upgraded to work with the Mattermost 3.0 server. If you want the latest version compatible with the 2.x server, please compile from the 2.0 release branch. 
+
 iOS application for use with Mattermost server 2.0 and higher (http://www.mattermost.org/download/) 
 
 A reference implementation of this iOS application [is available on iTunes as "Mattermost"](https://itunes.apple.com/us/app/mattermost/id984966508?ls=1&mt=8) 
