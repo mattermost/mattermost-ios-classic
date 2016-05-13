@@ -7,6 +7,10 @@ class MyURLProtocol: NSURLProtocol {
     override class func canInitWithRequest(request: NSURLRequest) -> Bool {
         //print("canInitWithRequest: " + (request.URL?.absoluteString)!)
         
+        if request.URL == nil ||  request.URL?.host == nil {
+            return false
+        }
+        
         let isServer = Utils.getServerUrl().containsString((request.URL?.host)!)
         let app = UIApplication.sharedApplication().delegate as! AppDelegate
         
@@ -20,6 +24,7 @@ class MyURLProtocol: NSURLProtocol {
             
             let isTownSquare  = request.URL?.path?.containsString("/channels/town-square") ?? false
             if (isServer && isTownSquare) {
+                print("canInitWithRequest.attemptToAttachDevice: " + (request.URL?.absoluteString)!)
                 currentView.performSelectorOnMainThread("attemptToAttachDevice", withObject: nil, waitUntilDone: false)
                 return false
             }
@@ -72,6 +77,8 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         
         if isServer && path.containsString("/channels/") {
             Utils.setProp(LAST_CHANNEL, value: path)
+        } else {
+            Utils.setProp(LAST_CHANNEL, value: "")
         }
 
         if isServer && path == "/login" {

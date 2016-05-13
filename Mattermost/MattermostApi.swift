@@ -118,6 +118,22 @@ public class MattermostApi: NSObject {
             Utils.setProp(MATTERM_TOKEN, value: "")
         }
     }
+
+    func connection(connection: NSURLConnection, canAuthenticateAgainstProtectionSpace protectionSpace: NSURLProtectionSpace?) -> Bool
+    {
+        return protectionSpace?.authenticationMethod == NSURLAuthenticationMethodServerTrust
+    }
+    
+    func connection(connection: NSURLConnection, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge?)
+    {
+        if challenge?.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust
+        {
+            let credentials = NSURLCredential(forTrust: challenge!.protectionSpace.serverTrust!)
+            challenge!.sender!.useCredential(credentials, forAuthenticationChallenge: challenge!)
+        }
+        
+        challenge?.sender!.continueWithoutCredentialForAuthenticationChallenge(challenge!)
+    }
     
     func connection(connection: NSURLConnection!, didReceiveData data: NSData!) {
         self.data.appendData(data)
