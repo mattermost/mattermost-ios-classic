@@ -91,6 +91,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     
     func logoutPressed() {
         if let navController = self.navigationController {
+            Utils.setProp(ATTACHED_DEVICE, value: "")
             self.navigationController?.navigationBarHidden = false
             navController.popViewControllerAnimated(true)
         }
