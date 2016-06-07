@@ -20,10 +20,14 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
     }
     
     func doNext() {
-        let serverUrl = urlField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString
+        var serverUrl = urlField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString
         
         if (serverUrl.characters.count == 0) {
             return
+        }
+        
+        if (!serverUrl.containsString("http")) {
+            serverUrl = "http://" + serverUrl;
         }
         
         Utils.setServerUrl(serverUrl)
