@@ -1,5 +1,7 @@
 Thank you for contributing to the Mattermost iOS App - Pull Requests to this repository are reviewed monthly. 
 
+Please test your PRs before submitting, and if applicable include unit tests. 
+
 If this is your first pull request to a Mattermost repository, please also fill in the Contributor License Agreement at:
 http://www.mattermost.org/mattermost-contributor-agreement/
 
