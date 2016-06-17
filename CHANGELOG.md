@@ -1,5 +1,42 @@
 # Mattermost iOS Application Changelog
 
+## Release v3.1.0  
+
+Released 2016-06-16
+
+### Features 
+- Added support for sending notifications to Apple Watch 
+- **Account Settings** > **Notifications** > **Mobile push notifications** option lets users to enable mobile push notifications for all activity, mentions only, or to disable push notifications. 
+- Push notifications sent even if a user is online on desktop.
+- Removed auto-capitalization on login screen, so email is no longer capitalized.
+
+### Contributors
+
+Many thanks to all our contributors. In alphabetical order:
+
+- [coreyhulen](https://github.com/coreyhulen)
+- [lfbrock](https://github.com/lfbrock)
+
+## Release v3.0.0  
+
+Released 2016-05-16
+
+### Features   
+- Added support for multiple teams on the same server
+- Added auto-correct
+- New option to include message snippets in push notifications
+
+### Breaking Change  
+- Users of Mattermost 3.0 server need to install new iOS 3.0 app. iOS 2.x apps are not compatible with Mattermost 3.0 server, and iOS 3.0 app is not compatible with Mattermost 2.x server. [See Mattermost v3.0 changelog for further details](http://docs.mattermost.com/administration/changelog.html#release-v3-0-3)
+
+### Contributors
+
+Many thanks to all our contributors. In alphabetical order:
+
+- [coreyhulen](https://github.com/coreyhulen)
+- [it33](https://github.com/it33)
+
+
 ## Release v2.0.0  
 
 ### Features   
@@ -11,7 +48,7 @@
 
 ## Release v1.0.0
 
-Released 2015–12-14
+Released 2015-12-14
 
 ### Release Highlights
 
