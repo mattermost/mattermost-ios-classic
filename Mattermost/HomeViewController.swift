@@ -29,6 +29,13 @@ class MyURLProtocol: NSURLProtocol {
                 return false
             }
             
+            let isLogin  = request.URL?.path?.containsString("/login") ?? false
+            if (isServer && isLogin) {
+                print("login detected")
+                Utils.setProp(ATTACHED_DEVICE, value: "")
+                return false
+            }
+            
             let isLogout  = request.URL?.path?.containsString("/users/logout") ?? false
             if (isServer && isLogout) {
                 print("logout detected")
