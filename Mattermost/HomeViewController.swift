@@ -191,15 +191,15 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         activityIndicator.startAnimating()
         currentUrl = Utils.getServerUrl() + Utils.getProp(LAST_CHANNEL)
         
-        if (!force) {
-            if let webViewUrl = webView.request?.URL!.absoluteString {
-                if (webViewUrl.containsString(currentUrl)) {
-                    print("skippingDoRootView")
-                    activityIndicator.stopAnimating()
-                    return
-                }
-            }
-        }
+//        if (!force) {
+//            if let webViewUrl = webView.request?.URL!.absoluteString {
+//                if (webViewUrl.containsString(currentUrl)) {
+//                    print("skippingDoRootView")
+//                    activityIndicator.stopAnimating()
+//                    return
+//                }
+//            }
+//        }
         
         let url = NSURL(string: currentUrl)
         let request = NSURLRequest(URL: url!)
@@ -237,6 +237,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         print("Home view fail with error \(error)");
         
         if errorCount < 3 {
+            sleep(3)
             self.doRootView(true);
             errorCount = errorCount + 1
             return
