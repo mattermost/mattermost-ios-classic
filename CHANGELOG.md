@@ -6,6 +6,7 @@ Released 2016-07-16
 
 ### Bug Fixes
 - When a session ends or is revoked, push notifications should now start sending again when the user logs back in
+- "Refresh/Logout" prompt no longer appears frequently when opening the app
 
 ### Contributors
 
