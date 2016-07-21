@@ -1,5 +1,19 @@
 # Mattermost iOS Application Changelog
 
+## Release v3.2.0  
+
+Released 2016-07-16
+
+### Bug Fixes
+- When a session ends or is revoked, push notifications should now start sending again when the user logs back in
+- "Refresh/Logout" prompt no longer appears frequently when opening the app
+
+### Contributors
+
+Many thanks to all our contributors. In alphabetical order:
+
+- [coreyhulen](https://github.com/coreyhulen)
+
 ## Release v3.1.0  
 
 Released 2016-06-16
