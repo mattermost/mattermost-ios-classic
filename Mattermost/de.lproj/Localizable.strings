@@ -1,0 +1,6 @@
+// Copyright (c) 2015 Mattermost, Inc. All Rights Reserved.
+// See License.txt for license information.
+
+UNKOWN_ERR = "Es sit ein unbekannter Fehler aufgetreten. (-1)";
+SIGNIN_NO_TEAM = "Das Team scheint nicht zu existieren.";
+SERVER_NOT_FOUND = "Es konnte keine Verbindung mit dem Mattermost Server hergestellt werden oder es läuft eine inkompatible Version.";
