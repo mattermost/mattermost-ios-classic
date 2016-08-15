@@ -22,7 +22,7 @@ Many thanks to all our contributors. In alphabetical order:
 
 - [coreyhulen](https://github.com/coreyhulen)
 - [hmhealey](https://github.com/hmhealey)
-- [lfbrock](https://github.com/lfbrock)
+- [jasonblais](https://github.com/jasonblais)
 
 ## Release v3.2.0  
 
