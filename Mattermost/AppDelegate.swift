@@ -43,9 +43,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
         let force = Utils.getShouldForceUpdate()
         print(force)
 
-        let nav = self.window!.rootViewController as! UINavigationController
-        if let currentView = nav.visibleViewController as? HomeViewController {
-            currentView.doRootView(force)
+        if (force) {
+            let nav = self.window!.rootViewController as! UINavigationController
+            if let currentView = nav.visibleViewController as? HomeViewController {
+                currentView.doRootView(force)
+            }
         }
     }
     
