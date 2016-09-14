@@ -1,5 +1,18 @@
 # Mattermost iOS Application Changelog
 
+## Release v3.4.0  
+
+Released 2016-09-16
+
+### Bug Fixes
+- Fixed issue where channels were reloading each time the app was opened.
+
+### Contributors
+
+Many thanks to all our contributors. In alphabetical order:
+
+- [coreyhulen](https://github.com/coreyhulen)
+
 ## Release v3.3.0  
 
 Released 2016-08-16
