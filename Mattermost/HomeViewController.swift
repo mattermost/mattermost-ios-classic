@@ -17,7 +17,7 @@ class MyURLProtocol: NSURLProtocol {
         let nav = app.window!.rootViewController as! UINavigationController
         if let currentView = nav.visibleViewController as? HomeViewController {
             
-            let isGetFile  = request.URL?.path?.containsString("/files/get/") ?? false
+            let isGetFile = request.URL?.path?.containsString("/files/") ?? false
             if (isServer && isGetFile) {
                 return false
             }
@@ -302,8 +302,8 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         }
         
         // Open files in another browser
-        let isFile  = request.URL?.path?.containsString("/files/get/") ?? false
-        if (currentUrl.containsString((request.URL?.host)!) && isFile) {
+        let isGetFile = request.URL?.path?.containsString("/files/") ?? false
+        if (currentUrl.containsString((request.URL?.host)!) && isGetFile) {
             self.navigationController?.navigationBarHidden = false
             return true
         }
