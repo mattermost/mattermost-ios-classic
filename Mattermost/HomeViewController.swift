@@ -47,7 +47,7 @@ class MyURLProtocol: NSURLProtocol {
         }
 
         return false
-    } 
+    }
 }
 
 var homeView: HomeViewController?
@@ -233,8 +233,12 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     }
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
-        activityIndicator.stopAnimating()
         print("Home view fail with error \(error)");
+        activityIndicator.stopAnimating()
+        if (error?.code == 204 && error?.domain == "WebKitErrorDomain") {
+            // "Plug-in handled load" (i.e. audio/video file)
+            return
+        }
         
         if errorCount < 3 {
             sleep(3)
