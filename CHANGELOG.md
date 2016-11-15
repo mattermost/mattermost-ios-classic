@@ -1,5 +1,22 @@
 # Mattermost iOS Application Changelog
 
+## Release v3.5.0  
+
+Released 2016-11-16
+
+### Improvements
+- Added support for playing video (MP4) and audio files from the webview.
+
+### Bug Fixes
+- Fixed an issue where users had no way to get back to the app when the "Download" link is clicked on images or PDF files.
+
+### Contributors
+
+Many thanks to all our contributors. In alphabetical order:
+
+- [coreyhulen](https://github.com/coreyhulen)
+- [thomochop](https://github.com/thomchop)
+
 ## Release v3.4.0  
 
 Released 2016-09-16
