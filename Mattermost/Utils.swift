@@ -45,11 +45,11 @@ class Utils {
     class func getShouldForceUpdate() -> Bool {
         let now = NSDate().timeIntervalSince1970
         let time = defaults.doubleForKey(CURRENT_BACKGROUND_TIME)
-        
+
         if (time == 0) {
             return true
         }
-                
+
         if (now - time < 300) {
             return false
         }
@@ -71,14 +71,16 @@ class Utils {
     
     class func setTeamUrl(var teamUrl: String) {
         
-        if (teamUrl[teamUrl.endIndex.advancedBy(-1)] == "/") {
-            teamUrl = teamUrl.substringToIndex(teamUrl.endIndex.advancedBy(-1))
-        }
-        
-        let index = teamUrl.rangeOfString("/", options: .BackwardsSearch)?.startIndex
-        if (index != nil) {
-            setProp(CURRENT_URL, value: teamUrl.substringToIndex(index!))
-            setProp(CURRENT_TEAM_NAME, value: teamUrl.substringFromIndex(index!.advancedBy(1)))
+        if (!teamUrl.isEmpty) {
+            if (teamUrl[teamUrl.endIndex.advancedBy(-1)] == "/") {
+                teamUrl = teamUrl.substringToIndex(teamUrl.endIndex.advancedBy(-1))
+            }
+            
+            let index = teamUrl.rangeOfString("/", options: .BackwardsSearch)?.startIndex
+            if (index != nil) {
+                setProp(CURRENT_URL, value: teamUrl.substringToIndex(index!))
+                setProp(CURRENT_TEAM_NAME, value: teamUrl.substringFromIndex(index!.advancedBy(1)))
+            }
         }
     }
     
