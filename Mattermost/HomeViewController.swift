@@ -275,7 +275,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         }
         
         // Open mailto: another browser
-        let isMailTo = request.URL?.absoluteString.hasPrefix("mailto:") ?? false
+        let isMailTo = request.URL?.absoluteString?.hasPrefix("mailto:") ?? false
         if (isMailTo) {
             UIApplication.sharedApplication().openURL(request.URL!)
             return false
