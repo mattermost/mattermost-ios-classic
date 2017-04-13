@@ -19,33 +19,33 @@ class LoginViewController: UIViewController, UITextFieldDelegate, MattermostApiP
         emailField.delegate = self
         api.delegate = self
         
-        proceedButton.layer.borderColor = proceedButton.titleLabel?.textColor.CGColor
+        proceedButton.layer.borderColor = proceedButton.titleLabel?.textColor.cgColor
         proceedButton.layer.borderWidth = 1.0
         proceedButton.layer.cornerRadius = 3.0
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
+        let defaults = UserDefaults.standard
+        let teamName = defaults.string(forKey: CURRENT_TEAM_NAME)
         teamTitle.title = teamName
                 
-        emailField.text = defaults.stringForKey(CURRENT_USER_EMAIL)
+        emailField.text = defaults.string(forKey: CURRENT_USER_EMAIL)
         
-        let type: UIUserNotificationType = [UIUserNotificationType.Badge, UIUserNotificationType.Alert, UIUserNotificationType.Sound];
-        let setting = UIUserNotificationSettings(forTypes: type, categories: nil);
-        UIApplication.sharedApplication().registerUserNotificationSettings(setting);
-        UIApplication.sharedApplication().registerForRemoteNotifications();
+        let type: UIUserNotificationType = [UIUserNotificationType.badge, UIUserNotificationType.alert, UIUserNotificationType.sound];
+        let setting = UIUserNotificationSettings(types: type, categories: nil);
+        UIApplication.shared.registerUserNotificationSettings(setting);
+        UIApplication.shared.registerForRemoteNotifications();
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         emailField.resignFirstResponder()
 //        api.login(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString, password: passwordField.text!)
         return true
     }
     
-    @IBAction func proceedClick(sender: AnyObject) {
+    @IBAction func proceedClick(_ sender: AnyObject) {
 //        api.login(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString, password: passwordField.text!)
     }
     
-    @IBAction func dismissKeyboard(sender: AnyObject) {
+    @IBAction func dismissKeyboard(_ sender: AnyObject) {
         emailField.resignFirstResponder()
     }
         
@@ -53,26 +53,27 @@ class LoginViewController: UIViewController, UITextFieldDelegate, MattermostApiP
         super.didReceiveMemoryWarning()
     }
     
-    func didRecieveResponse(results: JSON) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(results["email"].string, forKey: CURRENT_USER_EMAIL)
+    func didRecieveResponse(_ results: JSON) {
+        let defaults = UserDefaults.standard
+        defaults.set(results["email"].string, forKey: CURRENT_USER_EMAIL)
         passwordField.text = ""
         
-        self.performSegueWithIdentifier("home_view", sender: self)
+        self.performSegue(withIdentifier: "home_view", sender: self)
     }
     
-    func didRecieveError(var message: String) {
+    func didRecieveError(_ message: String) {
+        var message = message
         if (message == "We couldn't find the existing account") {
-            emailField.layer.borderColor = UIColor.redColor().CGColor
-            passwordField.layer.borderColor = UIColor.lightGrayColor().CGColor
+            emailField.layer.borderColor = UIColor.red.cgColor
+            passwordField.layer.borderColor = UIColor.lightGray.cgColor
         }
         else if (message == "Either user id or team name and user email must be provided") {
-            emailField.layer.borderColor = UIColor.redColor().CGColor
-            passwordField.layer.borderColor = UIColor.lightGrayColor().CGColor
+            emailField.layer.borderColor = UIColor.red.cgColor
+            passwordField.layer.borderColor = UIColor.lightGray.cgColor
             message = "Email address must be provided"
         } else {
-            passwordField.layer.borderColor = UIColor.redColor().CGColor
-            emailField.layer.borderColor = UIColor.lightGrayColor().CGColor
+            passwordField.layer.borderColor = UIColor.red.cgColor
+            emailField.layer.borderColor = UIColor.lightGray.cgColor
         }
         
         Utils.HandleUIError(message, label: errorLabel)

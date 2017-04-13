@@ -3,47 +3,47 @@
 
 import UIKit
 
-class MyURLProtocol: NSURLProtocol {
-    override class func canInitWithRequest(request: NSURLRequest) -> Bool {
+class MyURLProtocol: URLProtocol {
+    override class func canInit(with request: URLRequest) -> Bool {
         //print("canInitWithRequest: " + (request.URL?.absoluteString)!)
         
-        if request.URL == nil ||  request.URL?.host == nil {
+        if request.url == nil ||  request.url?.host == nil {
             return false
         }
         
-        let isServer = Utils.getServerUrl().containsString((request.URL?.host)!)
-        let app = UIApplication.sharedApplication().delegate as! AppDelegate
+        let isServer = Utils.getServerUrl().contains((request.url?.host)!)
+        let app = UIApplication.shared.delegate as! AppDelegate
         
         let nav = app.window!.rootViewController as! UINavigationController
         if let currentView = nav.visibleViewController as? HomeViewController {
             
-            let isGetFile = request.URL?.path?.containsString("/files/") ?? false
+            let isGetFile = request.url?.path.contains("/files/") ?? false
             if (isServer && isGetFile) {
                 return false
             }
             
-            let isTownSquare  = request.URL?.path?.containsString("/channels/town-square") ?? false
+            let isTownSquare  = request.url?.path.contains("/channels/town-square") ?? false
             if (isServer && isTownSquare) {
-                print("canInitWithRequest.attemptToAttachDevice: " + (request.URL?.absoluteString)!)
-                currentView.performSelectorOnMainThread("attemptToAttachDevice", withObject: nil, waitUntilDone: false)
+                print("canInitWithRequest.attemptToAttachDevice: " + (request.url?.absoluteString)!)
+                currentView.performSelector(onMainThread: "attemptToAttachDevice", with: nil, waitUntilDone: false)
                 return false
             }
             
-            let isLogin  = request.URL?.path?.containsString("/login") ?? false
+            let isLogin  = request.url?.path.contains("/login") ?? false
             if (isServer && isLogin) {
                 print("login detected")
                 Utils.setProp(ATTACHED_DEVICE, value: "")
                 return false
             }
             
-            let isLogout  = request.URL?.path?.containsString("/users/logout") ?? false
+            let isLogout  = request.url?.path.contains("/users/logout") ?? false
             if (isServer && isLogout) {
                 print("logout detected")
-                currentView.performSelectorOnMainThread("logoutPressed", withObject: nil, waitUntilDone: false)
+                currentView.performSelector(onMainThread: "logoutPressed", with: nil, waitUntilDone: false)
                 return false
             }
             
-            currentView.performSelectorOnMainThread("checkForRoot", withObject: nil, waitUntilDone: false)
+            currentView.performSelector(onMainThread: "checkForRoot", with: nil, waitUntilDone: false)
         }
 
         return false
@@ -76,31 +76,31 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     }
     
     func checkForRoot() {
-        let path = webView.stringByEvaluatingJavaScriptFromString("window.location.pathname")!
-        let server = webView.stringByEvaluatingJavaScriptFromString("window.location.hostname")!
-        let isServer = Utils.getServerUrl().containsString(server) ?? false
+        let path = webView.stringByEvaluatingJavaScript(from: "window.location.pathname")!
+        let server = webView.stringByEvaluatingJavaScript(from: "window.location.hostname")!
+        let isServer = Utils.getServerUrl().contains(server) ?? false
         
         //print("jspath: " + path)
         
-        if isServer && path.containsString("/channels/") {
+        if isServer && path.contains("/channels/") {
             Utils.setProp(LAST_CHANNEL, value: path)
         } else {
             Utils.setProp(LAST_CHANNEL, value: "")
         }
 
         if isServer && path == "/login" {
-            self.navigationController?.navigationBarHidden = false
+            self.navigationController?.isNavigationBarHidden = false
             return
         }
         
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
     }
     
     func logoutPressed() {
         if let navController = self.navigationController {
             Utils.setProp(ATTACHED_DEVICE, value: "")
-            self.navigationController?.navigationBarHidden = false
-            navController.popViewControllerAnimated(true)
+            self.navigationController?.isNavigationBarHidden = false
+            navController.popViewController(animated: true)
         }
     }
     
@@ -109,25 +109,25 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
             return
         }
         
-        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
+        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
-        let deleteAction = UIAlertAction(title: "Select Different Server", style: .Default, handler: {
+        let deleteAction = UIAlertAction(title: "Select Different Server", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             
             print("Attempting logout")
             if let navController = self.navigationController {
-                self.navigationController?.navigationBarHidden = false
-                navController.popViewControllerAnimated(true)
+                self.navigationController?.isNavigationBarHidden = false
+                navController.popViewController(animated: true)
             }
         })
         
-        let saveAction = UIAlertAction(title: "Refresh", style: .Default, handler: {
+        let saveAction = UIAlertAction(title: "Refresh", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             print("Attempting refresh")
             self.doRootView(true);
         })
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (alert: UIAlertAction!) -> Void in
         })
         
@@ -135,11 +135,11 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         optionMenu.addAction(saveAction)
         optionMenu.addAction(cancelAction)
         
-        self.presentViewController(optionMenu, animated: true, completion: nil)
+        self.present(optionMenu, animated: true, completion: nil)
     }
     
     func gestureRecognizer(_: UIGestureRecognizer,
-        shouldRecognizeSimultaneouslyWithGestureRecognizer:UIGestureRecognizer) -> Bool {
+        shouldRecognizeSimultaneouslyWith shouldRecognizeSimultaneouslyWithGestureRecognizer:UIGestureRecognizer) -> Bool {
             return true
     }
     
@@ -147,19 +147,19 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         super.viewDidLoad()
         homeView = self
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector:"keyboardWillAppear:", name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector:"keyboardWillDisappear:", name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        NSURLProtocol.registerClass(MyURLProtocol)
+        URLProtocol.registerClass(MyURLProtocol)
         webView.delegate = self
         webView.scrollView.bounces = false
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
         api.delegate = self
         
-        let type: UIUserNotificationType = [UIUserNotificationType.Badge, UIUserNotificationType.Alert, UIUserNotificationType.Sound];
-        let setting = UIUserNotificationSettings(forTypes: type, categories: nil);
-        UIApplication.sharedApplication().registerUserNotificationSettings(setting);
-        UIApplication.sharedApplication().registerForRemoteNotifications();
+        let type: UIUserNotificationType = [UIUserNotificationType.badge, UIUserNotificationType.alert, UIUserNotificationType.sound];
+        let setting = UIUserNotificationSettings(types: type, categories: nil);
+        UIApplication.shared.registerUserNotificationSettings(setting);
+        UIApplication.shared.registerForRemoteNotifications();
         
         //lpg = UILongPressGestureRecognizer(target:self, action:"longPress")
         //lpg.minimumPressDuration = 0.3
@@ -168,25 +168,25 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         doRootView()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    func keyboardWillAppear(notification: NSNotification){
+    func keyboardWillAppear(_ notification: Notification){
         keyboardVisible = true
     }
     
-    func keyboardWillDisappear(notification: NSNotification){
+    func keyboardWillDisappear(_ notification: Notification){
         keyboardVisible = false
     }
     
     func doBlank() {
         print("doBlank")
-        webView.loadRequest(NSURLRequest(URL: NSURL(string: "about:blank")!))
+        webView.loadRequest(URLRequest(url: URL(string: "about:blank")!))
     }
     
-    func doRootView(force:Bool=false) {
+    func doRootView(_ force:Bool=false) {
         print("doRootView")
         activityIndicator.startAnimating()
         currentUrl = Utils.getServerUrl() + Utils.getProp(LAST_CHANNEL)
@@ -201,8 +201,8 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
 //            }
 //        }
         
-        let url = NSURL(string: currentUrl)
-        let request = NSURLRequest(URL: url!)
+        let url = URL(string: currentUrl)
+        let request = URLRequest(url: url!)
         webView.loadRequest(request)
     }
     
@@ -210,32 +210,32 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         super.didReceiveMemoryWarning()
     }
     
-    func webViewDidStartLoad(webView: UIWebView) {
+    func webViewDidStartLoad(_ webView: UIWebView) {
         activityIndicator.startAnimating()
     }
     
-    func webViewDidFinishLoad(webView: UIWebView) {
+    func webViewDidFinishLoad(_ webView: UIWebView) {
         activityIndicator.stopAnimating()
         //webView.stringByEvaluatingJavaScriptFromString("document.body.style.webkitTouchCallout='none';")
     }
     
-    @IBAction func back(sender: AnyObject) {
-        self.navigationController?.navigationBarHidden = true
+    @IBAction func back(_ sender: AnyObject) {
+        self.navigationController?.isNavigationBarHidden = true
         
         if Utils.getProp(LAST_CHANNEL).characters.count > 0 {
             doRootView(true);
         } else {
             if let navController = self.navigationController {
-                self.navigationController?.navigationBarHidden = false
-                navController.popViewControllerAnimated(true)
+                self.navigationController?.isNavigationBarHidden = false
+                navController.popViewController(animated: true)
             }
         }
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
         print("Home view fail with error \(error)");
         activityIndicator.stopAnimating()
-        if (error?.code == 204 && error?.domain == "WebKitErrorDomain") {
+        if (error._code == 204 && error._domain == "WebKitErrorDomain") {
             // "Plug-in handled load" (i.e. audio/video file)
             return
         }
@@ -249,35 +249,35 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         
         errorCount = 0
         
-        let refreshAlert = UIAlertController(title: "Loading Error", message: "You may be offline or the Mattermost server you're trying to connect to is experiencing problems.", preferredStyle: UIAlertControllerStyle.Alert)
+        let refreshAlert = UIAlertController(title: "Loading Error", message: "You may be offline or the Mattermost server you're trying to connect to is experiencing problems.", preferredStyle: UIAlertControllerStyle.alert)
         
-        refreshAlert.addAction(UIAlertAction(title: "Refresh", style: .Default, handler: { (action: UIAlertAction!) in
+        refreshAlert.addAction(UIAlertAction(title: "Refresh", style: .default, handler: { (action: UIAlertAction!) in
             print("Attempting refresh")
             self.doRootView(true);
         }))
         
-        refreshAlert.addAction(UIAlertAction(title: "Logout", style: .Default, handler: { (action: UIAlertAction!) in
+        refreshAlert.addAction(UIAlertAction(title: "Logout", style: .default, handler: { (action: UIAlertAction!) in
             print("Attempting logout")
             if let navController = self.navigationController {
-                self.navigationController?.navigationBarHidden = false
-                navController.popViewControllerAnimated(true)
+                self.navigationController?.isNavigationBarHidden = false
+                navController.popViewController(animated: true)
             }
         }))
         
-        presentViewController(refreshAlert, animated: true, completion: nil)
+        present(refreshAlert, animated: true, completion: nil)
     }
     
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         //print("shouldStartLoadWithRequest: " + (request.URL?.absoluteString)!)
         
-        if ("about:blank" == request.URL?.absoluteString) {
+        if ("about:blank" == request.url?.absoluteString) {
             return false
         }
         
         // Open mailto: another browser
-        let isMailTo = request.URL?.absoluteString.hasPrefix("mailto:") ?? false
+        let isMailTo = request.url?.absoluteString.hasPrefix("mailto:") ?? false
         if (isMailTo) {
-            UIApplication.sharedApplication().openURL(request.URL!)
+            UIApplication.shared.openURL(request.url!)
             return false
         }
         
@@ -287,40 +287,40 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         }
         
         // If something is being loaded in an iframe then do not open in a new tab
-        let isIFrame = request.URL?.absoluteString != request.mainDocumentURL?.absoluteString
+        let isIFrame = request.url?.absoluteString != request.mainDocumentURL?.absoluteString
         if (isIFrame) {
             return true
         }
         
         // Open all external links in another browser
-        if (!currentUrl.containsString((request.URL?.host)!)) {
-            UIApplication.sharedApplication().openURL(request.URL!)
+        if (!currentUrl.contains((request.url?.host)!)) {
+            UIApplication.shared.openURL(request.url!)
             return false
         }
         
         // Open help link in another browser
-        let isHelp  = request.URL?.path?.containsString("/static/help") ?? false
-        if (currentUrl.containsString((request.URL?.host)!) && isHelp) {
-            UIApplication.sharedApplication().openURL(request.URL!)
+        let isHelp  = request.url?.path.contains("/static/help") ?? false
+        if (currentUrl.contains((request.url?.host)!) && isHelp) {
+            UIApplication.shared.openURL(request.url!)
             return false
         }
         
         // Open files in another browser
-        let isGetFile = request.URL?.path?.containsString("/files/") ?? false
-        if (currentUrl.containsString((request.URL?.host)!) && isGetFile) {
-            self.navigationController?.navigationBarHidden = false
+        let isGetFile = request.url?.path.contains("/files/") ?? false
+        if (currentUrl.contains((request.url?.host)!) && isGetFile) {
+            self.navigationController?.isNavigationBarHidden = false
             return true
         }
         
         return true
     }
     
-    func didRecieveResponse(results: JSON) {
+    func didRecieveResponse(_ results: JSON) {
         print("Successfully attached device id to session")
         Utils.setProp(ATTACHED_DEVICE, value: "true")
     }
     
-    func didRecieveError(message: String) {
+    func didRecieveError(_ message: String) {
         print("Failed attaching device id to session")
         print(message)
     }

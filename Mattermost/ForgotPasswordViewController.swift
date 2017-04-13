@@ -18,22 +18,22 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, Matte
         emailField.delegate = self
         api.delegate = self
         
-        resetButton.layer.borderColor = resetButton.titleLabel?.textColor.CGColor
+        resetButton.layer.borderColor = resetButton.titleLabel?.textColor.cgColor
         resetButton.layer.borderWidth = 1.0
         resetButton.layer.cornerRadius = 3.0
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         emailField.resignFirstResponder()
 //        api.forgotPassword(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString)
         return true
     }
     
-    @IBAction func dismissKeyboard(sender: AnyObject) {
+    @IBAction func dismissKeyboard(_ sender: AnyObject) {
         emailField.resignFirstResponder()
     }
     
-    @IBAction func resetClick(sender: AnyObject) {
+    @IBAction func resetClick(_ sender: AnyObject) {
 //        api.forgotPassword(emailField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString)
     }
     
@@ -41,14 +41,14 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, Matte
         super.didReceiveMemoryWarning()
     }
     
-    func didRecieveResponse(results: JSON) {
+    func didRecieveResponse(_ results: JSON) {
         if let navController = self.navigationController {
-            navController.popViewControllerAnimated(true)
+            navController.popViewController(animated: true)
         }
     }
     
-    func didRecieveError(message: String) {
+    func didRecieveError(_ message: String) {
         Utils.HandleUIError(message, label: errorLabel)
-        emailField.layer.borderColor = UIColor.redColor().CGColor
+        emailField.layer.borderColor = UIColor.red.cgColor
     }
 }

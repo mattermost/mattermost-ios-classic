@@ -16,22 +16,22 @@ let LAST_CHANNEL = "LastChannel"
 let BASE_URL_MATTERMOST = ""
 
 class Utils {
-    class func HandleUIError(message: String, label: UILabel) {
+    class func HandleUIError(_ message: String, label: UILabel) {
         label.center = CGPoint(x: label.center.x - 10, y: label.center.y)
         label.text = message
         label.alpha = 1
-        label.textColor = UIColor.redColor()
+        label.textColor = UIColor.red
         
-        UIView.animateWithDuration(1.0, delay: 0.0, usingSpringWithDamping: 0.1, initialSpringVelocity: 0.0, options: [], animations: {
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.1, initialSpringVelocity: 0.0, options: [], animations: {
             label.center = CGPoint(x: label.center.x + 10, y: label.center.y)
             }, completion: nil)
     }
     
-    static var defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    static var defaults: UserDefaults = UserDefaults.standard
     
-    class func getProp(key: String) -> String! {
+    class func getProp(_ key: String) -> String! {
         
-        if let v = defaults.stringForKey(key) {
+        if let v = defaults.string(forKey: key) {
             return v
         }
         
@@ -39,12 +39,12 @@ class Utils {
     }
     
     class func setWentToBackground() {
-        defaults.setValue(NSDate().timeIntervalSince1970, forKey: CURRENT_BACKGROUND_TIME)
+        defaults.setValue(Date().timeIntervalSince1970, forKey: CURRENT_BACKGROUND_TIME)
     }
     
     class func getShouldForceUpdate() -> Bool {
-        let now = NSDate().timeIntervalSince1970
-        let time = defaults.doubleForKey(CURRENT_BACKGROUND_TIME)
+        let now = Date().timeIntervalSince1970
+        let time = defaults.double(forKey: CURRENT_BACKGROUND_TIME)
         
         if (time == 0) {
             return true
@@ -57,9 +57,10 @@ class Utils {
         return true
     }
     
-    class func setServerUrl(var serverUrl: String) {
-        if (serverUrl.characters.count != 0 && serverUrl[serverUrl.endIndex.advancedBy(-1)] == "/") {
-            serverUrl = serverUrl.substringToIndex(serverUrl.endIndex.advancedBy(-1))
+    class func setServerUrl(_ serverUrl: String) {
+        var serverUrl = serverUrl
+        if (serverUrl.characters.count != 0 && serverUrl[serverUrl.characters.index(serverUrl.endIndex, offsetBy: -1)] == "/") {
+            serverUrl = serverUrl.substring(to: serverUrl.characters.index(serverUrl.endIndex, offsetBy: -1))
         }
         
         setProp(CURRENT_URL, value: serverUrl)
@@ -69,28 +70,29 @@ class Utils {
         return getProp(CURRENT_URL)
     }
     
-    class func setTeamUrl(var teamUrl: String) {
+    class func setTeamUrl(_ teamUrl: String) {
+        var teamUrl = teamUrl
         
-        if (teamUrl[teamUrl.endIndex.advancedBy(-1)] == "/") {
-            teamUrl = teamUrl.substringToIndex(teamUrl.endIndex.advancedBy(-1))
+        if (teamUrl[teamUrl.characters.index(teamUrl.endIndex, offsetBy: -1)] == "/") {
+            teamUrl = teamUrl.substring(to: teamUrl.characters.index(teamUrl.endIndex, offsetBy: -1))
         }
         
-        let index = teamUrl.rangeOfString("/", options: .BackwardsSearch)?.startIndex
+        let index = teamUrl.range(of: "/", options: .backwards)?.lowerBound
         if (index != nil) {
-            setProp(CURRENT_URL, value: teamUrl.substringToIndex(index!))
-            setProp(CURRENT_TEAM_NAME, value: teamUrl.substringFromIndex(index!.advancedBy(1)))
+            setProp(CURRENT_URL, value: teamUrl.substring(to: index!))
+            setProp(CURRENT_TEAM_NAME, value: teamUrl.substring(to: index!))
         }
     }
     
-    class func setProp(key: String, value: String) {
+    class func setProp(_ key: String, value: String) {
         defaults.setValue(value, forKey: key)
     }
     
-    class func getCookie(key: String) -> String {
-        let _ : NSHTTPCookie = NSHTTPCookie()
-        let cookieJar : NSHTTPCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+    class func getCookie(_ key: String) -> String {
+        let _ : HTTPCookie = HTTPCookie()
+        let cookieJar : HTTPCookieStorage = HTTPCookieStorage.shared
 
-        for cookie in cookieJar.cookies! as [NSHTTPCookie]{
+        for cookie in cookieJar.cookies! as [HTTPCookie]{
             if (cookie.name == key) {
                 return cookie.value
             }
