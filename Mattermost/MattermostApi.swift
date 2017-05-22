@@ -5,11 +5,11 @@ import Foundation
 import UIKit
 
 protocol MattermostApiProtocol {
-    func didRecieveResponse(result: JSON)
-    func didRecieveError(message: String)
+    func didRecieveResponse(_ result: JSON)
+    func didRecieveError(_ message: String)
 }
 
-public class MattermostApi: NSObject {
+open class MattermostApi: NSObject {
     
     static let API_ROUTE = "/api/v3"
     
@@ -24,33 +24,33 @@ public class MattermostApi: NSObject {
     }
     
     func initBaseUrl() {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let url = defaults.stringForKey(CURRENT_URL)
+        let defaults = UserDefaults.standard
+        let url = defaults.string(forKey: CURRENT_URL)
         
         if (url != nil && (url!).characters.count > 0) {
             baseUrl = url!
         }
     }
     
-    func doPost(url: String, data: JSON) ->  NSURLConnection {
+    func doPost(_ url: String, data: JSON) ->  NSURLConnection {
         print(baseUrl + url)
-        let url: NSURL = NSURL(string: baseUrl + url)!
-        let request: NSMutableURLRequest = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "POST"
+        let url: URL = URL(string: baseUrl + url)!
+        let request: NSMutableURLRequest = NSMutableURLRequest(url: url)
+        request.httpMethod = "POST"
         request.addValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
-        request.HTTPBody = try! data.rawData()
-        let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
+        request.httpBody = try! data.rawData()
+        let connection: NSURLConnection = NSURLConnection(request: request as URLRequest, delegate: self, startImmediately: false)!
         
         return connection
     }
     
-    func doGet(url: String) ->  NSURLConnection {
+    func doGet(_ url: String) ->  NSURLConnection {
         print(baseUrl + url)
-        let url: NSURL = NSURL(string: baseUrl + url)!
-        let request: NSMutableURLRequest = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        let url: URL = URL(string: baseUrl + url)!
+        let request: NSMutableURLRequest = NSMutableURLRequest(url: url)
+        request.httpMethod = "GET"
         request.addValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
-        let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
+        let connection: NSURLConnection = NSURLConnection(request: request as URLRequest, delegate: self, startImmediately: false)!
         
         return connection
     }
@@ -100,14 +100,14 @@ public class MattermostApi: NSObject {
 //        connection.start()
 //    }
     
-    func connection(connection: NSURLConnection!, didFailWithError error: NSError!) {
+    func connection(_ connection: NSURLConnection!, didFailWithError error: NSError!) {
         statusCode = error.code
         print("Error: statusCode=\(statusCode) data=\(error.localizedDescription)")
         delegate?.didRecieveError("\(error.localizedDescription) [\(statusCode)]")
     }
     
-    func connection(didReceiveResponse: NSURLConnection!, didReceiveResponse response: NSURLResponse!) {
-        statusCode = (response as? NSHTTPURLResponse)?.statusCode ?? -1
+    func connection(_ didReceiveResponse: NSURLConnection!, didReceiveResponse response: URLResponse!) {
+        statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
         self.data = NSMutableData()
         
         let mmsid = Utils.getCookie(MATTERM_TOKEN)
@@ -119,33 +119,33 @@ public class MattermostApi: NSObject {
         }
     }
 
-    func connection(connection: NSURLConnection, canAuthenticateAgainstProtectionSpace protectionSpace: NSURLProtectionSpace?) -> Bool
+    func connection(_ connection: NSURLConnection, canAuthenticateAgainstProtectionSpace protectionSpace: URLProtectionSpace?) -> Bool
     {
         return protectionSpace?.authenticationMethod == NSURLAuthenticationMethodServerTrust
     }
     
-    func connection(connection: NSURLConnection, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge?)
+    func connection(_ connection: NSURLConnection, didReceiveAuthenticationChallenge challenge: URLAuthenticationChallenge?)
     {
         if challenge?.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust
         {
-            let credentials = NSURLCredential(forTrust: challenge!.protectionSpace.serverTrust!)
-            challenge!.sender!.useCredential(credentials, forAuthenticationChallenge: challenge!)
+            let credentials = URLCredential(trust: challenge!.protectionSpace.serverTrust!)
+            challenge!.sender!.use(credentials, for: challenge!)
         }
         
-        challenge?.sender!.continueWithoutCredentialForAuthenticationChallenge(challenge!)
+        challenge?.sender!.continueWithoutCredential(for: challenge!)
     }
     
-    func connection(connection: NSURLConnection!, didReceiveData data: NSData!) {
-        self.data.appendData(data)
+    func connection(_ connection: NSURLConnection!, didReceiveData data: Data!) {
+        self.data.append(data)
     }
     
-    func connectionDidFinishLoading(connection: NSURLConnection!) {
-        let json = JSON(data: data)
+    func connectionDidFinishLoading(_ connection: NSURLConnection!) {
+        let json = JSON(data: data as Data)
         
         if (statusCode == 200) {
             delegate?.didRecieveResponse(json)
         } else {
-            let datastring = NSString(data: data, encoding: NSUTF8StringEncoding)
+            let datastring = NSString(data: data as Data, encoding: String.Encoding.utf8.rawValue)
             print("Error: statusCode=\(statusCode) data=\(datastring)")
             
             if let message = json["message"].string {

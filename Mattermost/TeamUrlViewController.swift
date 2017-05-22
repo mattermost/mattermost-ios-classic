@@ -11,16 +11,16 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
     
     var api: MattermostApi = MattermostApi()
     
-    @IBAction func nextClick(sender: UIBarButtonItem) {
+    @IBAction func nextClick(_ sender: UIBarButtonItem) {
         doNext()
     }
     
-    @IBAction func proceedClick(sender: AnyObject) {
+    @IBAction func proceedClick(_ sender: AnyObject) {
         doNext()
     }
     
     func doNext() {
-        let serverUrl = urlField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString
+        let serverUrl = urlField.text ?? "https://mattermost.com"
         
         if (serverUrl.characters.count == 0) {
             return
@@ -37,7 +37,7 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
         urlField.delegate = self
         api.delegate = self
         
-        proceedButton.layer.borderColor = proceedButton.titleLabel?.textColor.CGColor
+        proceedButton.layer.borderColor = proceedButton.titleLabel?.textColor.cgColor
         proceedButton.layer.borderWidth = 1.0
         proceedButton.layer.cornerRadius = 3.0
         
@@ -48,13 +48,13 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
         urlField.text = Utils.getServerUrl()
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         urlField.resignFirstResponder()
         doNext()
         return true
     }
     
-    @IBAction func dismissKeyboard(sender: UITapGestureRecognizer) {
+    @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         urlField.resignFirstResponder()
     }
 
@@ -62,7 +62,7 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
         super.didReceiveMemoryWarning()
     }
     
-    func didRecieveResponse(results: JSON) {
+    func didRecieveResponse(_ results: JSON) {
         
         var isValidServer = false
                 
@@ -73,28 +73,28 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
         }
     
         if (isValidServer) {
-            self.performSegueWithIdentifier("home_view", sender: self)
+            self.performSegue(withIdentifier: "home_view", sender: self)
         } else {
             Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
-            urlField.layer.borderColor = UIColor.redColor().CGColor
+            urlField.layer.borderColor = UIColor.red.cgColor
         }
     }
         
-    func didRecieveError(message: String) {
-        if (message.containsString("-1003")) {
+    func didRecieveError(_ message: String) {
+        if (message.contains("-1003")) {
             Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
-        } else if (message.containsString("-1002")) {
+        } else if (message.contains("-1002")) {
             Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version.d"), label: errorLabel)
-        } else if (message.containsString("Invalid domain parameter")) {
+        } else if (message.contains("Invalid domain parameter")) {
             Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
-        } else if (message.containsString("(-1)")) {
+        } else if (message.contains("(-1)")) {
             Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
-        } else if (message.containsString("UNKNOWN_ERR")) {
+        } else if (message.contains("UNKNOWN_ERR")) {
             Utils.HandleUIError(NSLocalizedString("SERVER_NOT_FOUND", comment: "We could not connect to the Mattermost server or the server running in an incompatible version."), label: errorLabel)
         } else {
             Utils.HandleUIError(message, label: errorLabel)
         }
         
-        urlField.layer.borderColor = UIColor.redColor().CGColor
+        urlField.layer.borderColor = UIColor.red.cgColor
     }
 }

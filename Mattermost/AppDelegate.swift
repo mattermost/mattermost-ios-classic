@@ -8,12 +8,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
 
     var window: UIWindow?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let signInController = self.window!.rootViewController as! UINavigationController
         signInController.delegate = self
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let token = defaults.stringForKey(MATTERM_TOKEN)
+        let defaults = UserDefaults.standard
+        let token = defaults.string(forKey: MATTERM_TOKEN)
         
         if (token != nil && (token!).characters.count > 0) {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -21,14 +21,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
             //let loginInView = storyboard.instantiateViewControllerWithIdentifier("EmailPasswordView")
             //signInController.pushViewController(loginInView, animated: false)
             
-            let HomeView = storyboard.instantiateViewControllerWithIdentifier("HomeView") 
+            let HomeView = storyboard.instantiateViewController(withIdentifier: "HomeView") 
             signInController.pushViewController(HomeView, animated: false)
         }
         
         return true
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         print("DidEnterBackground")
         Utils.setWentToBackground()
 //        let nav = self.window!.rootViewController as! UINavigationController
@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
 //        }
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         print("WillEnterForeground")
         
         let force = Utils.getShouldForceUpdate()
@@ -51,24 +51,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
         }
     }
     
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         print("WillResignActive")
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         print("DidBecomeActive")
         application.applicationIconBadgeNumber = 0
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         print("WillTerminate")
     }
     
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        let tokenChars = UnsafePointer<CChar>(deviceToken.bytes)
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenChars = (deviceToken as NSData).bytes.bindMemory(to: CChar.self, capacity: deviceToken.count)
         var tokenString = ""
         
-        for var i = 0; i < deviceToken.length; i++ {
+        for i in 0 ..< deviceToken.count {
             tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
         }
 
@@ -76,16 +76,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
         Utils.setProp(DEVICE_TOKEN, value: tokenString)
     }
     
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print(error)
     }
     
-    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
     }
     
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler handler: (UIBackgroundFetchResult) -> Void) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler handler: @escaping (UIBackgroundFetchResult) -> Void) {
         print(userInfo)
-        handler(UIBackgroundFetchResult.NewData)
+        handler(UIBackgroundFetchResult.newData)
     }
 }
 

@@ -12,14 +12,14 @@ class TextField: UITextField {
         super.init(coder: aDecoder)
         self.layer.borderWidth = 1.0
         self.layer.cornerRadius = 3.0;
-        self.layer.borderColor = UIColor.lightGrayColor().CGColor
+        self.layer.borderColor = UIColor.lightGray.cgColor
     }
     
-    override func textRectForBounds(bounds: CGRect) -> CGRect {
-        return CGRectInset(bounds , insetX , insetY)
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.insetBy(dx: insetX , dy: insetY)
     }
     
-    override func editingRectForBounds(bounds: CGRect) -> CGRect {
-        return CGRectInset(bounds , insetX , insetY)
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.insetBy(dx: insetX , dy: insetY)
     }
 }
