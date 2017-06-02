@@ -1,0 +1,60 @@
+
+/* Class = "UIBarButtonItem"; title = "Team"; ObjectID = "1nr-bu-B2O"; */
+"1nr-bu-B2O.title" = "Team";
+
+/* Class = "UINavigationItem"; title = "Mattermost"; ObjectID = "5L9-vt-w1p"; */
+"5L9-vt-w1p.title" = "Mattermost";
+
+/* Class = "UITextField"; placeholder = "E.g. https://server.com/"; ObjectID = "GV6-dn-r3s"; */
+"GV6-dn-r3s.placeholder" = "z.B.: https://server.com/";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "Gjl-iX-X51"; */
+"Gjl-iX-X51.placeholder" = "Passwort";
+
+/* Class = "UIBarButtonItem"; title = "Back"; ObjectID = "JRv-dz-rZJ"; */
+"JRv-dz-rZJ.title" = "Zurück";
+
+/* Class = "UILabel"; text = "This is where an error will show"; ObjectID = "Lkr-Cw-Inf"; */
+"Lkr-Cw-Inf.text" = "Hier würde der Fehler erscheinen";
+
+/* Class = "UILabel"; text = "An email will be sent with a link to reset your password"; ObjectID = "Mi0-40-HWN"; */
+"Mi0-40-HWN.text" = "Es wird eine E-Mail mit einem Link zum Zurücksetzen Ihres Passwortes verschickt";
+
+/* Class = "UITextField"; placeholder = "Email Address"; ObjectID = "QnW-aG-yDp"; */
+"QnW-aG-yDp.placeholder" = "E-Mail Adresse";
+
+/* Class = "UINavigationItem"; title = "Forgot Password"; ObjectID = "R92-Gu-nr1"; */
+"R92-Gu-nr1.title" = "Passwort vergessen";
+
+/* Class = "UIButton"; normalTitle = "Forgot your password?"; ObjectID = "UYg-6g-zKo"; */
+"UYg-6g-zKo.normalTitle" = "Haben Sie Ihr Passwort vergessen?";
+
+/* Class = "UILabel"; text = "Enter the email address associated with your account."; ObjectID = "VGh-we-Ziv"; */
+"VGh-we-Ziv.text" = "Geben Sie die E-Mail Adresse ein die mit Ihrem Zugang verknüpft ist.";
+
+/* Class = "UILabel"; text = "Sign in to Mattermost"; ObjectID = "Yea-f7-cAb"; */
+"Yea-f7-cAb.text" = "In Mattermost anmelden";
+
+/* Class = "UIButton"; normalTitle = "Next"; ObjectID = "b1K-5D-umH"; */
+"b1K-5D-umH.normalTitle" = "Weiter";
+
+/* Class = "UILabel"; text = "Enter Server URL"; ObjectID = "gb0-C5-Ddc"; */
+"gb0-C5-Ddc.text" = "Server URL eingeben";
+
+/* Class = "UIButton"; normalTitle = "Sign In"; ObjectID = "hTj-CR-wEe"; */
+"hTj-CR-wEe.normalTitle" = "Anmelden";
+
+/* Class = "UILabel"; text = "This is where an error will show"; ObjectID = "q1N-cS-DS4"; */
+"q1N-cS-DS4.text" = "Hier würde ein Fehler stehen";
+
+/* Class = "UIButton"; normalTitle = "Reset Password"; ObjectID = "r3V-0M-rdJ"; */
+"r3V-0M-rdJ.normalTitle" = "Passwort zurücksetzen";
+
+/* Class = "UITextField"; placeholder = "Email Address"; ObjectID = "ra9-Bm-gmQ"; */
+"ra9-Bm-gmQ.placeholder" = "E-Mail Adresse";
+
+/* Class = "UINavigationItem"; title = "Sign In"; ObjectID = "wcy-Ed-UWC"; */
+"wcy-Ed-UWC.title" = "Anmelden";
+
+/* Class = "UINavigationItem"; title = "Mattermost"; ObjectID = "xSX-If-8pD"; */
+"xSX-If-8pD.title" = "Mattermost";
