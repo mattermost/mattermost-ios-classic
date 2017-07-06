@@ -51,6 +51,7 @@
 		F273627F1ACDC85E008A789A /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		F28326F01BF2A3150010B5E4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		F2866BD91ACC64DB00DA7271 /* MattermostApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MattermostApi.swift; sourceTree = "<group>"; };
+		F289E4681F0DF51B00DDF9C7 /* Mattermost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mattermost.entitlements; sourceTree = "<group>"; };
 		F28BE3921ACA0C3A00B1CB3C /* TeamUrlViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamUrlViewController.swift; sourceTree = "<group>"; };
 		F29EC50F1C20859C00D2034A /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		F2CCD0921BFD127B002F06DC /* TextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
@@ -96,6 +97,7 @@
 		F255FCAD1AC9AC1300FF6E23 /* Mattermost */ = {
 			isa = PBXGroup;
 			children = (
+				F289E4681F0DF51B00DDF9C7 /* Mattermost.entitlements */,
 				F29EC50F1C20859C00D2034A /* Localizable.strings */,
 				F2CCD0921BFD127B002F06DC /* TextField.swift */,
 				F25C13421ACC758600996029 /* SwiftyJSON.swift */,
@@ -385,6 +387,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mattermost/Mattermost.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UQ8HT4Q2XM;
@@ -404,6 +407,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mattermost/Mattermost.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UQ8HT4Q2XM;
