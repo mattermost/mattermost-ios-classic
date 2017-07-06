@@ -190,6 +190,7 @@
 				TargetAttributes = {
 					F255FCAA1AC9AC1300FF6E23 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = UQ8HT4Q2XM;
 						LastSwiftMigration = 0830;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -386,7 +387,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UQ8HT4Q2XM;
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				INFOPLIST_FILE = Mattermost/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -405,7 +406,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UQ8HT4Q2XM;
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				INFOPLIST_FILE = Mattermost/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
