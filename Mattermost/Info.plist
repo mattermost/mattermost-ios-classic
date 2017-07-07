@@ -46,6 +46,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Attach photo and video from camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>You can safely ignore and discard this</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
