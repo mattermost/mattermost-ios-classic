@@ -11,7 +11,9 @@ protocol MattermostApiProtocol {
 
 open class MattermostApi: NSObject {
     
-    static let API_ROUTE = "/api/v3"
+    static let API_ROUTE_V4 = "/api/v4"
+    static let API_ROUTE_V3 = "/api/v3"
+    static let API_ROUTE = API_ROUTE_V4
     
     var baseUrl = ""
     var data: NSMutableData = NSMutableData()
@@ -27,78 +29,142 @@ open class MattermostApi: NSObject {
         let defaults = UserDefaults.standard
         let url = defaults.string(forKey: CURRENT_URL)
         
-        if (url != nil && (url!).characters.count > 0) {
+        if (url != nil && (url!).count > 0) {
             baseUrl = url!
         }
     }
     
-    func doPost(_ url: String, data: JSON) ->  NSURLConnection {
-        print(baseUrl + url)
-        let url: URL = URL(string: baseUrl + url)!
-        let request: NSMutableURLRequest = NSMutableURLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
-        request.httpBody = try! data.rawData()
-        let connection: NSURLConnection = NSURLConnection(request: request as URLRequest, delegate: self, startImmediately: false)!
-        
-        return connection
+    func getPing() {
+        return getPing(versionRoute: MattermostApi.API_ROUTE)
     }
     
-    func doGet(_ url: String) ->  NSURLConnection {
-        print(baseUrl + url)
-        let url: URL = URL(string: baseUrl + url)!
-        let request: NSMutableURLRequest = NSMutableURLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
-        let connection: NSURLConnection = NSURLConnection(request: request as URLRequest, delegate: self, startImmediately: false)!
+    func getPing(versionRoute: String) {
+        var endpoint: String = baseUrl + versionRoute
         
-        return connection
+        if (versionRoute == MattermostApi.API_ROUTE_V3) {
+            endpoint += "/general/ping"
+        } else {
+            endpoint += "/system/ping"
+        }
+        
+        print(endpoint)
+        guard let url = URL(string: endpoint) else {
+            print("Error cannot create URL")
+            return
+        }
+        
+        let urlRequest = URLRequest(url: url)
+        let session = URLSession.shared
+        
+        let task = session.dataTask(with: urlRequest) {
+            (data, response, error) in
+            
+            var code = 0
+            if (response as? HTTPURLResponse) != nil {
+                code = (response as! HTTPURLResponse).statusCode
+            }
+            
+            guard error == nil else {
+                print(error!)
+                print("Error: statusCode=\(code) data=\(error!.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.delegate?.didRecieveError("\(error!.localizedDescription) [\(code)]")
+                }
+                
+                return
+            }
+            
+            guard let responseData = data else {
+                print("Error: did not receive data")
+                DispatchQueue.main.async {
+                    self.delegate?.didRecieveError("Did not receive data from the server.")
+                }
+                
+                return
+            }
+            
+            let json = JSON(data: responseData as Data)
+
+            if (code == 200) {
+                print("Found API version " + versionRoute)
+                Utils.setProp(API_ROUTE_PROP, value: versionRoute)
+
+                DispatchQueue.main.async {
+                    self.delegate?.didRecieveResponse(json)
+                }
+            } else if (code == 404) {
+                print("Couldn't find V4 API falling back to V3")
+                
+                if (versionRoute != MattermostApi.API_ROUTE_V3) {
+                    return self.getPing(versionRoute: MattermostApi.API_ROUTE_V3)
+                } else {
+                    DispatchQueue.main.async {
+                        self.delegate?.didRecieveError("Couldn't find the correct Mattermost server version.")
+                    }
+                }
+            } else {
+                let datastring = NSString(data: responseData as Data, encoding: String.Encoding.utf8.rawValue)
+                print("Error: statusCode=\(code) data=\(datastring!)")
+
+                if let message = json["message"].string {
+                    DispatchQueue.main.async {
+                        self.delegate?.didRecieveError(message)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.delegate?.didRecieveError(NSLocalizedString("UNKOWN_ERR", comment: "An unknown error has occured (-1)"))
+                    }
+                }
+            }
+        }
+        
+        task.resume()
     }
-    
-//    func signup(email: String, name: String) {
-//        let connection = doPost("/api/v1/teams/signup", data: JSON(["email": email, "name" : name]))
-//        connection.start()
-//    }
-    
-//    func findTeams(email: String) {
-//        let connection = doPost("/api/v1/teams/email_teams", data: JSON(["email": email]))
-//        connection.start()
-//    }
     
     func attachDeviceId() {
-        let connection = doPost(MattermostApi.API_ROUTE + "/users/attach_device", data: JSON(["device_id": "apple:" + Utils.getProp(DEVICE_TOKEN)]))
-        connection.start()
+        var endpoint: String = baseUrl + Utils.getProp(API_ROUTE_PROP)
+        
+        if (Utils.getProp(API_ROUTE_PROP) == MattermostApi.API_ROUTE_V3) {
+            endpoint += "/users/attach_device"
+        } else {
+            endpoint += "/users/sessions/device"
+        }
+        
+        print(endpoint)
+        guard let url = URL(string: endpoint) else {
+            print("Error cannot create URL")
+            return
+        }
+        
+        var urlRequest = URLRequest(url: url)
+        if (Utils.getProp(API_ROUTE_PROP) == MattermostApi.API_ROUTE_V3) {
+            urlRequest.httpMethod = "POST"
+        } else {
+            urlRequest.httpMethod = "PUT"
+        }
+        
+        urlRequest.addValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
+        urlRequest.httpBody = try! JSON(["device_id": "apple:" + Utils.getProp(DEVICE_TOKEN)]).rawData()
+        let session = URLSession.shared
+        
+        let task = session.dataTask(with: urlRequest) {
+            (data, response, error) in
+            
+            var code = 0
+            if (response as? HTTPURLResponse) != nil {
+                code = (response as! HTTPURLResponse).statusCode
+            }
+            
+            guard error == nil else {
+                print(error!)
+                print("Error: statusCode=\(code) data=\(error!.localizedDescription)")
+                
+                return
+            }
+        }
+        
+        task.resume()
     }
-    
-    func getInitialLoad() {
-        let connection = doGet(MattermostApi.API_ROUTE + "/users/initial_load")
-        connection.start()
-    }
-    
-//    func findTeamByName(name: String) {
-//        let connection = doPost("/api/v1/teams/find_team_by_name", data: JSON(["name": name]))
-//        connection.start()
-//    }
-    
-//    func login(email: String, password: String) {
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
-//        var json :JSON = ["name":teamName!]
-//        json["email"] = JSON(email)
-//        json["password"] = JSON(password)
-//        json["device_id"] = JSON("apple:" + Utils.getProp(DEVICE_TOKEN))
-//        let connection = doPost("/api/v1/users/login", data: json)
-//        connection.start()
-//    }
-    
-//    func forgotPassword(email: String) {
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        let teamName = defaults.stringForKey(CURRENT_TEAM_NAME)
-//        var json :JSON = ["name":teamName!]
-//        json["email"] = JSON(email)
-//        let connection = doPost("/api/v1/users/send_password_reset", data: json)
-//        connection.start()
-//    }
     
     func connection(_ connection: NSURLConnection!, didFailWithError error: NSError!) {
         statusCode = error.code
@@ -146,7 +212,7 @@ open class MattermostApi: NSObject {
             delegate?.didRecieveResponse(json)
         } else {
             let datastring = NSString(data: data as Data, encoding: String.Encoding.utf8.rawValue)
-            print("Error: statusCode=\(statusCode) data=\(datastring)")
+            print("Error: statusCode=\(statusCode) data=\(datastring!)")
             
             if let message = json["message"].string {
                 delegate?.didRecieveError(message)

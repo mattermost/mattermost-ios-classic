@@ -22,14 +22,14 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
     func doNext() {
         let serverUrl = urlField.text ?? "https://mattermost.com"
         
-        if (serverUrl.characters.count == 0) {
+        if (serverUrl.count == 0) {
             return
         }
         
         Utils.setServerUrl(serverUrl)
         print("here")
         api.initBaseUrl()
-        api.getInitialLoad()
+        api.getPing()
     }
     
     override func viewDidLoad() {
@@ -63,11 +63,16 @@ class TeamUrlViewController: UIViewController, UITextFieldDelegate, MattermostAp
     }
     
     func didRecieveResponse(_ results: JSON) {
-        
         var isValidServer = false
                 
-        if let version = results["client_cfg"]["Version"].string {
-            if version.characters.count > 0 {
+        if let version = results["version"].string {
+            if version.count > 0 {
+                isValidServer = true
+            }
+        }
+        
+        if let status = results["status"].string {
+            if status.count > 0 {
                 isValidServer = true
             }
         }

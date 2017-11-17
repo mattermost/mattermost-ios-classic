@@ -12,6 +12,7 @@ let CURRENT_TEAM_NAME = "CurrentTeamName"
 let CURRENT_URL = "CurrentUrl"
 let CURRENT_BACKGROUND_TIME = "CurrentBackTime"
 let LAST_CHANNEL = "LastChannel"
+let API_ROUTE_PROP = "apiRoute"
 
 let BASE_URL_MATTERMOST = ""
 
@@ -59,8 +60,8 @@ class Utils {
     
     class func setServerUrl(_ serverUrl: String) {
         var serverUrl = serverUrl
-        if (serverUrl.characters.count != 0 && serverUrl[serverUrl.characters.index(serverUrl.endIndex, offsetBy: -1)] == "/") {
-            serverUrl = serverUrl.substring(to: serverUrl.characters.index(serverUrl.endIndex, offsetBy: -1))
+        if (serverUrl.count != 0 && serverUrl[serverUrl.index(serverUrl.endIndex, offsetBy: -1)] == "/") {
+            serverUrl = String(serverUrl[..<serverUrl.index(serverUrl.endIndex, offsetBy: -1)])
         }
         
         setProp(CURRENT_URL, value: serverUrl)
@@ -73,14 +74,14 @@ class Utils {
     class func setTeamUrl(_ teamUrl: String) {
         var teamUrl = teamUrl
         
-        if (teamUrl[teamUrl.characters.index(teamUrl.endIndex, offsetBy: -1)] == "/") {
-            teamUrl = teamUrl.substring(to: teamUrl.characters.index(teamUrl.endIndex, offsetBy: -1))
+        if (teamUrl[teamUrl.index(teamUrl.endIndex, offsetBy: -1)] == "/") {
+            teamUrl = String(teamUrl[..<teamUrl.index(teamUrl.endIndex, offsetBy: -1)])
         }
         
         let index = teamUrl.range(of: "/", options: .backwards)?.lowerBound
         if (index != nil) {
-            setProp(CURRENT_URL, value: teamUrl.substring(to: index!))
-            setProp(CURRENT_TEAM_NAME, value: teamUrl.substring(to: index!))
+            setProp(CURRENT_URL, value: String(teamUrl[..<index!]))
+            setProp(CURRENT_TEAM_NAME, value: String(teamUrl[..<index!]))
         }
     }
     

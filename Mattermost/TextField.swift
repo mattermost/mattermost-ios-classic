@@ -5,8 +5,8 @@ import UIKit
 
 
 class TextField: UITextField {
-    var insetX: CGFloat = 5
-    var insetY: CGFloat = 10
+    @objc var insetX: CGFloat = 5
+    @objc var insetY: CGFloat = 10
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
