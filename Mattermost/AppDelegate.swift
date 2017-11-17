@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
         let defaults = UserDefaults.standard
         let token = defaults.string(forKey: MATTERM_TOKEN)
         
-        if (token != nil && (token!).characters.count > 0) {
+        if (token != nil && (token!).count > 0) {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             
             //let loginInView = storyboard.instantiateViewControllerWithIdentifier("EmailPasswordView")

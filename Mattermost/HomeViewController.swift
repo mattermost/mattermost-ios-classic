@@ -3,52 +3,56 @@
 
 import UIKit
 
+
 class MyURLProtocol: URLProtocol {
     override class func canInit(with request: URLRequest) -> Bool {
-        //print("canInitWithRequest: " + (request.URL?.absoluteString)!)
-        
-        if request.url == nil ||  request.url?.host == nil {
-            return false
+        DispatchQueue.main.async {
+            //print("canInitWithRequest: " + (request.URL?.absoluteString)!)
+            
+            if request.url == nil ||  request.url?.host == nil {
+                return
+            }
+            
+            let isServer = Utils.getServerUrl().contains((request.url?.host)!)
+            let app = UIApplication.shared.delegate as! AppDelegate
+            
+            let nav = app.window!.rootViewController as! UINavigationController
+            if let currentView = nav.visibleViewController as? HomeViewController {
+                
+                let isGetFile = request.url?.path.contains("/files/") ?? false
+                if (isServer && isGetFile) {
+                    return
+                }
+                
+                let isTownSquare  = request.url?.path.contains("/channels/town-square") ?? false
+                if (isServer && isTownSquare) {
+                    print("canInitWithRequest.attemptToAttachDevice: " + (request.url?.absoluteString)!)
+                    currentView.performSelector(onMainThread: #selector(HomeViewController.attemptToAttachDevice), with: nil, waitUntilDone: false)
+                    return
+                }
+                
+                let isLogin  = request.url?.path.contains("/login") ?? false
+                if (isServer && isLogin) {
+                    print("login detected")
+                    Utils.setProp(ATTACHED_DEVICE, value: "")
+                    return
+                }
+                
+                let isLogout  = request.url?.path.contains("/users/logout") ?? false
+                if (isServer && isLogout) {
+                    print("logout detected")
+                    currentView.performSelector(onMainThread: #selector(HomeViewController.logoutPressed), with: nil, waitUntilDone: false)
+                    return
+                }
+                
+                currentView.performSelector(onMainThread: #selector(HomeViewController.checkForRoot), with: nil, waitUntilDone: false)
+            }
         }
         
-        let isServer = Utils.getServerUrl().contains((request.url?.host)!)
-        let app = UIApplication.shared.delegate as! AppDelegate
-        
-        let nav = app.window!.rootViewController as! UINavigationController
-        if let currentView = nav.visibleViewController as? HomeViewController {
-            
-            let isGetFile = request.url?.path.contains("/files/") ?? false
-            if (isServer && isGetFile) {
-                return false
-            }
-            
-            let isTownSquare  = request.url?.path.contains("/channels/town-square") ?? false
-            if (isServer && isTownSquare) {
-                print("canInitWithRequest.attemptToAttachDevice: " + (request.url?.absoluteString)!)
-                currentView.performSelector(onMainThread: "attemptToAttachDevice", with: nil, waitUntilDone: false)
-                return false
-            }
-            
-            let isLogin  = request.url?.path.contains("/login") ?? false
-            if (isServer && isLogin) {
-                print("login detected")
-                Utils.setProp(ATTACHED_DEVICE, value: "")
-                return false
-            }
-            
-            let isLogout  = request.url?.path.contains("/users/logout") ?? false
-            if (isServer && isLogout) {
-                print("logout detected")
-                currentView.performSelector(onMainThread: "logoutPressed", with: nil, waitUntilDone: false)
-                return false
-            }
-            
-            currentView.performSelector(onMainThread: "checkForRoot", with: nil, waitUntilDone: false)
-        }
-
         return false
     }
 }
+
 
 var homeView: HomeViewController?
 
@@ -64,7 +68,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     
     var api: MattermostApi = MattermostApi()
     
-    func attemptToAttachDevice() {
+    @objc func attemptToAttachDevice() {
         let mmsid = Utils.getCookie(MATTERM_TOKEN)
         if (mmsid != "") {
             Utils.setProp(MATTERM_TOKEN, value: mmsid)
@@ -75,10 +79,10 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         }
     }
     
-    func checkForRoot() {
+    @objc func checkForRoot() {
         let path = webView.stringByEvaluatingJavaScript(from: "window.location.pathname")!
         let server = webView.stringByEvaluatingJavaScript(from: "window.location.hostname")!
-        let isServer = Utils.getServerUrl().contains(server) ?? false
+        let isServer = Utils.getServerUrl().contains(server)
         
         //print("jspath: " + path)
         
@@ -96,7 +100,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         self.navigationController?.isNavigationBarHidden = true
     }
     
-    func logoutPressed() {
+    @objc func logoutPressed() {
         if let navController = self.navigationController {
             Utils.setProp(ATTACHED_DEVICE, value: "")
             self.navigationController?.isNavigationBarHidden = false
@@ -147,10 +151,10 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         super.viewDidLoad()
         homeView = self
         
-        NotificationCenter.default.addObserver(self, selector:"keyboardWillAppear:", name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector:"keyboardWillDisappear:", name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(HomeViewController.keyboardWillAppear(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(HomeViewController.keyboardWillDisappear(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        URLProtocol.registerClass(MyURLProtocol)
+        URLProtocol.registerClass(MyURLProtocol.self)
         webView.delegate = self
         webView.scrollView.bounces = false
         self.navigationController?.isNavigationBarHidden = true
@@ -173,11 +177,11 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         NotificationCenter.default.removeObserver(self)
     }
     
-    func keyboardWillAppear(_ notification: Notification){
+    @objc func keyboardWillAppear(_ notification: Notification){
         keyboardVisible = true
     }
     
-    func keyboardWillDisappear(_ notification: Notification){
+    @objc func keyboardWillDisappear(_ notification: Notification){
         keyboardVisible = false
     }
     
@@ -222,7 +226,7 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
     @IBAction func back(_ sender: AnyObject) {
         self.navigationController?.isNavigationBarHidden = true
         
-        if Utils.getProp(LAST_CHANNEL).characters.count > 0 {
+        if Utils.getProp(LAST_CHANNEL).count > 0 {
             doRootView(true);
         } else {
             if let navController = self.navigationController {
