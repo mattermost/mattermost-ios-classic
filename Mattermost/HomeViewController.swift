@@ -2,6 +2,7 @@
 // See License.txt for license information.
 
 import UIKit
+import JavaScriptCore
 
 
 class MyURLProtocol: URLProtocol {
@@ -159,6 +160,14 @@ class HomeViewController: UIViewController, UIWebViewDelegate, MattermostApiProt
         webView.scrollView.bounces = false
         self.navigationController?.isNavigationBarHidden = true
         api.delegate = self
+        
+        let context = webView.value(forKeyPath: "documentView.webView.mainFrame.javaScriptContext") as! JSContext
+        let logFunction : @convention(block) (String) -> Void =
+        {
+            (msg: String) in
+            NSLog("Console: %@", msg)
+        }
+        context.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, to: AnyObject.self), forKeyedSubscript: "log" as NSCopying & NSObjectProtocol)
         
         let type: UIUserNotificationType = [UIUserNotificationType.badge, UIUserNotificationType.alert, UIUserNotificationType.sound];
         let setting = UIUserNotificationSettings(types: type, categories: nil);
