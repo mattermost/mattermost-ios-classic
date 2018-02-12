@@ -50,6 +50,10 @@ open class MattermostApi: NSObject {
         print(endpoint)
         guard let url = URL(string: endpoint) else {
             print("Error cannot create URL")
+            DispatchQueue.main.async {
+                self.delegate?.didRecieveError("Invalid URL.  Please check to make sure the URL is correct.")
+            }
+            
             return
         }
         
